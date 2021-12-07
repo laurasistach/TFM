@@ -7,7 +7,8 @@ public class Pirate_Movement : MonoBehaviour
     public GameObject pirate;
     public GameObject prota;
     public GameObject message_pirate;
-    private int tmax = 13;
+    public AudioSource audioPirate;
+    private int tmax = 16;
 
 
     void Start()
@@ -23,6 +24,7 @@ public class Pirate_Movement : MonoBehaviour
 
         if (col.gameObject.name == "box1"){
 		Destroy(col.gameObject);
+        audioPirate.Play();
         message_pirate.GetComponent<Renderer>().enabled = true;
         message_pirate.transform.position = prota.transform.position - new Vector3(20,-10,0);
     
@@ -30,38 +32,47 @@ public class Pirate_Movement : MonoBehaviour
         }
         if (col.gameObject.name == "box2"){
 		Destroy(col.gameObject);
+        audioPirate.Play();
         Invoke("NewBreathing2",0.5f);
         }
         if (col.gameObject.name == "box3"){
         Destroy(col.gameObject);
+        audioPirate.Play();
         Invoke("NewBreathing3",0.5f);
         }
         if (col.gameObject.name == "box4"){
         Destroy(col.gameObject);
+        audioPirate.Play();
         Invoke("NewBreathing4",0.5f);
         }
         if (col.gameObject.name == "box5"){
         Destroy(col.gameObject);
+        audioPirate.Play();
         Invoke("NewBreathing5",0.5f);
         }
         if (col.gameObject.name == "box6"){
         Destroy(col.gameObject);
+        audioPirate.Play();
         Invoke("NewBreathing6",0.5f);
         }
         if (col.gameObject.name == "box7"){
         Destroy(col.gameObject);
+        audioPirate.Play();
         Invoke("NewBreathing7",0.5f);
         }
         if (col.gameObject.name == "box8"){
         Destroy(col.gameObject);
+        audioPirate.Play();
         Invoke("NewBreathing8",0.5f);
         }
         if (col.gameObject.name == "box9"){
         Destroy(col.gameObject);
+        audioPirate.Play();
         Invoke("NewBreathin9",0.5f);
         }
         if (col.gameObject.name == "bruixola"){
         Debug.Log("END!!!!");
+        audioPirate.Play();
         }
 
 	   
@@ -104,7 +115,7 @@ public class Pirate_Movement : MonoBehaviour
             pirate.transform.position = Vector3.Lerp(startPosPirate, posbox5,Time.deltaTime * 1/tmax);
         }
         // Lerp cap a box6
-        if (GameObject.Find("box") == null && GameObject.Find("box2") == null && GameObject.Find("box3") == null && GameObject.Find("box4") == null && GameObject.Find("box5") == null && GameObject.Find("box6") != null){
+        if (GameObject.Find("box1") == null && GameObject.Find("box2") == null && GameObject.Find("box3") == null && GameObject.Find("box4") == null && GameObject.Find("box5") == null && GameObject.Find("box6") != null){
             Vector3 posbox6=  GameObject.Find("box6").transform.position;
             Vector3 startPosPirate = pirate.transform.position;
             pirate.transform.position = Vector3.Lerp(startPosPirate, posbox6,Time.deltaTime * 1/tmax);

@@ -4,36 +4,29 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement; 
 
-public class Veler_Movement : MonoBehaviour
+public class Balloon_Movement : MonoBehaviour
 {
     public GameObject prota;
-    public GameObject pirate;
     public GameObject message_inhale;
     public GameObject message_relax;
-    public GameObject bomba;
     private int breathings_number;
     public Text breathings_number_text;
     public GameObject message_end;
     public GameObject prota_celebrate;
-    public GameObject confeti;
-    public GameObject bruixolaObj;
-    public GameObject veler;
-    public GameObject mapa;
+    private bool cel=false;
+    private bool terra=false;
     private bool end=false;
     private bool colision = false;
 	public AudioSource audioSource;
 	public AudioSource audioSourceEnd;
-	private int ValueExhale = -36; //idealment hauria d'agafar-se de Calibration.maxValueInhale
+	private int ValueInhale = -36; //idealment hauria d'agafar-se de Calibration.maxValueInhale
 
 
     void Start()
     {
     	prota.GetComponent<Renderer>().enabled = true;
-    	pirate.GetComponent<Renderer>().enabled = true;
-    	bruixolaObj.GetComponent<Renderer>().enabled = true;
 	    message_end.GetComponent<Renderer>().enabled = false;
         prota_celebrate.GetComponent<Renderer>().enabled = false;
-        confeti.GetComponent<Renderer>().enabled = false;
     }
 
   	void OnCollisionEnter2D(Collision2D col)
@@ -48,15 +41,25 @@ public class Veler_Movement : MonoBehaviour
 		Debug.Log(breathings_number);
 	   }
 
-	   if (col.gameObject.name == "bruixola") 
+	   if (end ==false && col.gameObject.name == "barra_cel")
+	   {
+	    Invoke("Down",0);
+	    Debug.Log("no hauria de pujar mes");
+	   }
+
+	   if (col.gameObject.name == "barra_terra")
+	   {
+	    cel=false;
+	    terra = true;
+	    Debug.Log("no hauria de baixar mes");
+	   }
+	   
+
+	   if (col.gameObject.name == "last") 
 	   {
 	   	end=true;
 	   }
 
-	   if (col.gameObject.tag == "pirata")
-	    {
-	    	Physics2D.IgnoreCollision(col.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-	    }
 	}
 
     void Update()
@@ -64,16 +67,21 @@ public class Veler_Movement : MonoBehaviour
     	float db = 20 * Mathf.Log10(Mathf.Abs(MicInput.MicLoudness));
 
     	if (end==false) {
-    	// Veler es mou sempre (lent)
+    	// Globus cau sempre (lent)
+    		Invoke("Down",0);
+    		/*
 	    	Vector3 position = prota.transform.position; 
-	    	position.x = position.x + 0.01f;
+	    	position.y = position.y - 0.005f;
+	    	position.x = position.x + 0.005f;
 	    	prota.transform.position = position;
+	    	*/
+
 
     	}
 
-    	// Quan bufa -> es mouen més ràpid
+    	// Quan inhala -> es mouen més ràpid
     	//if (end == false && Input.GetKeyDown(KeyCode.Space)){ 
-    	if (end == false && db<1 && db > (ValueExhale + ValueExhale*0.3) ){
+    	if (end == false && db<1 && db > (ValueInhale + ValueInhale*0.3) ){
 			Invoke("Move",0);
 		}
 
@@ -84,21 +92,23 @@ public class Veler_Movement : MonoBehaviour
 
 	void Move(){
 		Vector3 position = prota.transform.position;
-		position.x = position.x + 0.2f; //2
+		position.y = position.y + 0.2f; //2
+		position.x = position.x + 0.1f; //2
 		prota.transform.position = position;
+	}
+
+	void Down(){
+		Vector3 position = prota.transform.position; 
+	    position.y = position.y - 0.005f;
+	    position.x = position.x + 0.005f;
+	    prota.transform.position = position;
 	}
 
 	void End(){
 		audioSourceEnd.Play();
-		bruixolaObj.GetComponent<Renderer>().enabled = false;
 	   	prota.GetComponent<Renderer>().enabled = false;
-	   	veler.GetComponent<Renderer>().enabled = false;
-        mapa.GetComponent<Renderer>().enabled = false;
-    	pirate.GetComponent<Renderer>().enabled = false;
-    	bomba.GetComponent<Renderer>().enabled = false;
 	    message_end.GetComponent<Renderer>().enabled = true;
         prota_celebrate.GetComponent<Renderer>().enabled = true;
-        confeti.GetComponent<Renderer>().enabled = true;
 	}
 		
 	void ChangeSceneToPirates(){
