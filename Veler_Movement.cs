@@ -11,7 +11,7 @@ public class Veler_Movement : MonoBehaviour
     public GameObject message_inhale;
     public GameObject message_relax;
     public GameObject bomba;
-    public int breathings_number;
+    private int breathings_number;
     public Text breathings_number_text;
     public GameObject message_end;
     public GameObject prota_celebrate;
@@ -21,11 +21,8 @@ public class Veler_Movement : MonoBehaviour
     public GameObject mapa;
     private bool end=false;
     private bool colision = false;
-	private float timer = 3f;
-	private Vector3 posbox1;
-	private Vector3 startPosPirate;
-	public int tmax=13; 
 	public AudioSource audioSource;
+	public AudioSource audioSourceEnd;
 	private int ValueExhale = -36; //idealment hauria d'agafar-se de Calibration.maxValueInhale
 
 
@@ -66,7 +63,7 @@ public class Veler_Movement : MonoBehaviour
     {
     	float db = 20 * Mathf.Log10(Mathf.Abs(MicInput.MicLoudness));
 
-    	if (end==false){
+    	if (end==false) {
     	// Veler es mou sempre (lent)
 	    	Vector3 position = prota.transform.position; 
 	    	position.x = position.x + 0.01f;
@@ -87,11 +84,12 @@ public class Veler_Movement : MonoBehaviour
 
 	void Move(){
 		Vector3 position = prota.transform.position;
-		position.x = position.x + 0.1f; //2
+		position.x = position.x + 0.2f; //2
 		prota.transform.position = position;
 	}
 
 	void End(){
+		audioSourceEnd.Play();
 		bruixolaObj.GetComponent<Renderer>().enabled = false;
 	   	prota.GetComponent<Renderer>().enabled = false;
 	   	veler.GetComponent<Renderer>().enabled = false;
