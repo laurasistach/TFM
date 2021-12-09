@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 public class Balloon_Movement : MonoBehaviour
 {
     public GameObject prota;
-    public GameObject message_inhale;
-    public GameObject message_relax;
+    //public GameObject message_inhale;
+    //public GameObject message_relax;
     public GameObject message_end;
     public GameObject confeti;
     private int breathings_number;
@@ -28,8 +28,8 @@ public class Balloon_Movement : MonoBehaviour
         prota_celebrate.GetComponent<Renderer>().enabled = false;
         confeti.GetComponent<Renderer>().enabled = false;
         message_end.GetComponent<Renderer>().enabled = false;
-        message_inhale.SetActive(false);
-        message_relax.SetActive(false);
+        //message_inhale.SetActive(false);
+        //message_relax.SetActive(false);
     }
 
   	void OnCollisionEnter2D(Collision2D col)
@@ -37,8 +37,8 @@ public class Balloon_Movement : MonoBehaviour
 	   if (col.gameObject.name == "box1" || col.gameObject.name == "box2"|| col.gameObject.name == "box3"|| col.gameObject.name == "box4"|| col.gameObject.name == "box5"|| col.gameObject.name == "box6"|| col.gameObject.name == "box7"|| col.gameObject.name == "box8"|| col.gameObject.name == "box9")
 	   {
 	   	prota_celebrate.GetComponent<Renderer>().enabled = false;
-        message_inhale.SetActive(false);
-        message_relax.SetActive(true);
+        //message_inhale.SetActive(false);
+        //message_relax.SetActive(true);
 	   	colision = true;
 		breathings_number++; 
 		breathings_number_text.text = breathings_number.ToString();
@@ -51,15 +51,15 @@ public class Balloon_Movement : MonoBehaviour
 	   {
 	   	cel = true;
 	   	terra = false;
-	    message_inhale.SetActive(false);
+	    //message_inhale.SetActive(false);
 	   }
 
 	   if (col.gameObject.name == "barra_terra")
 	   {
 	    cel=false;
 	    terra = true;
-	    message_inhale.SetActive(true);
-	    message_relax.SetActive(false);
+	    //message_inhale.SetActive(true);
+	    //message_relax.SetActive(false);
 	   }
 	   
 
@@ -92,14 +92,14 @@ public class Balloon_Movement : MonoBehaviour
 
 	void Move(){
 		Vector3 position = prota.transform.position;
-		position.y = position.y + 1f; //0.2
-		position.x = position.x + 0.5f; //0.1
+		position.y = position.y + 0.2f; //1
+		position.x = position.x + 0.1f; //0.5
 		prota.transform.position = position;
 	}
 
 	void Down(){
 		Vector3 position = prota.transform.position; 
-	    position.y = position.y - 0.02f; 
+	    position.y = position.y - 0.03f; 
 	    position.x = position.x + 0.02f; 
 	    prota.transform.position = position;
 	}
@@ -107,8 +107,8 @@ public class Balloon_Movement : MonoBehaviour
 	void End(){
 		audioSourceEnd.Play();
 	   	prota.GetComponent<Renderer>().enabled = false;
-	   	message_inhale.SetActive(false);
-        message_relax.SetActive(false);
+	   	//message_inhale.SetActive(false);
+        //message_relax.SetActive(false);
         prota_celebrate.GetComponent<Renderer>().enabled = true;
         confeti.GetComponent<Renderer>().enabled = true;
         message_end.GetComponent<Renderer>().enabled = true;
