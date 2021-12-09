@@ -22,6 +22,12 @@ public class Blowing_Volcano : MonoBehaviour
     public GameObject message_relax;
     public int breathings_number;
     public Text breathings_number_text;
+    public AudioSource audioSource;
+    public AudioSource audioSourceEnd;
+    private int ValueExhale = -36; //idealment hauria d'agafar-se de Calibration.maxValueInhale
+    private float targetTime = 3.0f;
+
+
    
     void Start()
     {
@@ -45,29 +51,96 @@ public class Blowing_Volcano : MonoBehaviour
 
     void Update()
     {
-    	if (Input.GetKeyDown(KeyCode.Space)) { //if db > -30
-    		Invoke("Blow",0);
-        	
-		}
-		if (Input.GetKeyDown(KeyCode.RightArrow)) { //if db > -30
-    		Invoke("Lava1Disappear",0);
-        	
-		}
-		//Invoke("Lava1Disappear",3f);
 
+        float db = 20 * Mathf.Log10(Mathf.Abs(MicInput.MicLoudness));
+        //if(Input.GetKeyDown(KeyCode.Space))
+        if(db<1 && db > (ValueExhale + ValueExhale*0.3))
+        {
+            Invoke("Blow",0);
+            targetTime -= Time.deltaTime;
+            Debug.Log(targetTime);
 
-		
+            if (targetTime <= 0.0f)
+            {
+                Invoke("Relax",0);
+                if (GameObject.Find("lava1") != null){
+                    breathings_number++;
+                    breathings_number_text.text = breathings_number.ToString();
+                    audioSource.Play();
+                    Destroy(GameObject.Find("lava1"));
+                    targetTime = 3;
+                    // AFEGIR TEMPS DE DESCANS
+
+                }
+                else if (GameObject.Find("lava2")){
+                    breathings_number++;
+                    breathings_number_text.text = breathings_number.ToString();
+                    audioSource.Play();
+                    Destroy(GameObject.Find("lava2"));
+                    targetTime = 3;
+                    // AFEGIR TEMPS DE DESCANS
+                }
+                else if (GameObject.Find("lava3")){
+                    breathings_number++;
+                    breathings_number_text.text = breathings_number.ToString();
+                    audioSource.Play();
+                    Destroy(GameObject.Find("lava3"));
+                    targetTime = 3;
+                }
+                else if (GameObject.Find("lava4")){
+                    breathings_number++;
+                    breathings_number_text.text = breathings_number.ToString();
+                    audioSource.Play();
+                    Destroy(GameObject.Find("lava4"));
+                }
+                else if (GameObject.Find("lava5")){
+                    breathings_number++;
+                    breathings_number_text.text = breathings_number.ToString();
+                    audioSource.Play();
+                    Destroy(GameObject.Find("lava5"));
+                }
+                else if (GameObject.Find("lava6")){
+                    breathings_number++;
+                    breathings_number_text.text = breathings_number.ToString();
+                    audioSource.Play();
+                    Destroy(GameObject.Find("lava6"));
+                }
+                else if (GameObject.Find("lava7")){
+                    breathings_number++;
+                    breathings_number_text.text = breathings_number.ToString();
+                    audioSource.Play();
+                    Destroy(GameObject.Find("lava7"));
+                }
+                else if (GameObject.Find("lava8")){
+                    breathings_number++;
+                    breathings_number_text.text = breathings_number.ToString();
+                    audioSource.Play();
+                    Destroy(GameObject.Find("lava8"));
+                }
+                else if (GameObject.Find("lava9")){
+                    breathings_number++;
+                    breathings_number_text.text = breathings_number.ToString();
+                    audioSource.Play();
+                    Destroy(GameObject.Find("lava9"));
+                }
+                else if (GameObject.Find("lava10")){
+                    breathings_number++;
+                    breathings_number_text.text = breathings_number.ToString();
+                    audioSource.Play();
+                    Destroy(GameObject.Find("lava10"));
+                    Debug.Log("end of the game");
+                }
+            }
+        }
 	}
 
 	void Blow(){
 		prota_normal.GetComponent<Renderer>().enabled = false;
         prota_blowing.GetComponent<Renderer>().enabled = true;
     	air.GetComponent<Renderer>().enabled = true;
-
 	}
 
-	void Lava1Disappear(){
-		lava1.GetComponent<Renderer>().enabled = false;
+	void Relax(){
 		message_blow.GetComponent<Renderer>().enabled = false;
 		message_relax.GetComponent<Renderer>().enabled = true;
 		prota_normal.GetComponent<Renderer>().enabled = true;
@@ -75,5 +148,5 @@ public class Blowing_Volcano : MonoBehaviour
     	air.GetComponent<Renderer>().enabled = false;
 	}
 
-	
+    
 }
