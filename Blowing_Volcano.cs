@@ -25,15 +25,18 @@ public class Blowing_Volcano : MonoBehaviour
     public Text breathings_number_text;
     public AudioSource audioSource;
     public AudioSource audioSourceEnd;
-    private int ValueExhale = -36; //idealment hauria d'agafar-se de Calibration.maxValueInhale
+    //private int ValueExhale = -36; //idealment hauria d'agafar-se de Calibration.maxValueInhale
     private float targetTime = 1.0f; // 3; temps de bufada; --> canviarho a tot arreu!!!!
     private float pauseTime = 1.0f; // 3; temps de descans entre blowing i blowing
     public Text targetTime_text;
     private bool end = false;
+    private int ValueExhale;
 
-   
+
     void Start()
     {
+        ValueExhale = PlayerPrefs.GetInt("ValueExhaleName");
+        Debug.Log("ValueExhale new scene"+ValueExhale);
         prota_normal.GetComponent<Renderer>().enabled = true;
         prota_blowing.GetComponent<Renderer>().enabled = false;
         prota_end.GetComponent<Renderer>().enabled = false;

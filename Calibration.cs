@@ -20,7 +20,15 @@ public class Calibration : MonoBehaviour
 	public Text maxValueInhale_text;
 	public static float maxValueExhale;
 	public static float maxValueInhale;
+	private int ValueExhale;
+	private int ValueInhale;
 
+    private void OnDestroy(){ //Called when changing scenes, if object not set to DontDestroyOnLoad.
+    	PlayerPrefs.SetInt("ValueInhaleName",ValueInhale);
+    	PlayerPrefs.SetInt("ValueExhaleName",ValueExhale);
+    	PlayerPrefs.Save();
+    }
+    
     public void AddToListExhale(float value)
     {
         ValuesExhale.Add(value);
@@ -33,13 +41,15 @@ public class Calibration : MonoBehaviour
 
     void Start()
     {
-    	DontDestroyOnLoad (this);
-
     	Button btnEx = Exhale.GetComponent<Button>();
         btnEx.onClick.AddListener(CalibrationExhale);
         Button btnInh = Inhale.GetComponent<Button>();
         btnInh.onClick.AddListener(CalibrationInhale);
+        ValueExhale = PlayerPrefs.GetInt("ValueExhalePrefsName",-44); 
+        ValueInhale = PlayerPrefs.GetInt("ValueInhalePrefsName",-65);
+        Debug.Log("ValueExhale start"+ValueExhale);
     }
+
 
     void CalibrationExhale(){
     	buttonExhalePressed = true;
@@ -51,7 +61,6 @@ public class Calibration : MonoBehaviour
     void Update()
     {
     	// Exhalació
-
     	if (buttonExhalePressed == true){
 			timer1 -= Time.deltaTime;
     	}
@@ -73,10 +82,12 @@ public class Calibration : MonoBehaviour
 			}
 			maxValueExhale /= ValuesExhale.Count;
 			maxValueExhale_text.text = Mathf.Round(maxValueExhale).ToString();
+			int ValueExhale = Mathf.RoundToInt(maxValueExhale);
+			PlayerPrefs.SetInt("ValueExhaleName",ValueExhale);
+			Debug.Log("ValueExhale after blowing"+ValueExhale);
 		}
 
 		// Inhalació
-
 		if (buttonInhalePressed == true){
 			timer2 -= Time.deltaTime;
     	}
@@ -98,10 +109,17 @@ public class Calibration : MonoBehaviour
 			}
 			maxValueInhale /= ValuesInhale.Count;
 			maxValueInhale_text.text = Mathf.Round(maxValueInhale).ToString();
-
+			int ValueInhale = Mathf.RoundToInt(maxValueInhale);
+			PlayerPrefs.SetInt("ValueInhaleName",ValueInhale);
 		}
-
     }
+
+
+    /* private void LoadData(){ 
+    	ValueExhale = PlayerPrefs.GetInt(ValueExhalePrefsName,-44); // si no hi ha cap valor guardat, s'inicialitzarà a -44
+    	ValueInhale = PlayerPrefs.GetInt(ValueInhalePrefsName,-65);
+    } */
+    
 
 
 }
