@@ -23,11 +23,14 @@ public class Veler_Movement : MonoBehaviour
     private bool colision = false;
 	public AudioSource audioSource;
 	public AudioSource audioSourceEnd;
-	private int ValueExhale = -36; //idealment hauria d'agafar-se de Calibration.maxValueInhale
+	//private int ValueExhale = -36; //idealment hauria d'agafar-se de Calibration.maxValueInhale
+   	private int ValueExhale;
 
 
     void Start()
     {
+    	ValueExhale = PlayerPrefs.GetInt("ValueExhaleName");
+    	Debug.Log("ValueExhale new scene"+ValueExhale);
     	prota.GetComponent<Renderer>().enabled = true;
     	pirate.GetComponent<Renderer>().enabled = true;
     	bruixolaObj.GetComponent<Renderer>().enabled = true;
@@ -90,6 +93,7 @@ public class Veler_Movement : MonoBehaviour
 
 	void End(){
 		audioSourceEnd.Play();
+		audioSourceEnd.SetScheduledEndTime(AudioSettings.dspTime+(3f-0f));
 		bruixolaObj.GetComponent<Renderer>().enabled = false;
 	   	prota.GetComponent<Renderer>().enabled = false;
 	   	veler.GetComponent<Renderer>().enabled = false;
@@ -101,9 +105,6 @@ public class Veler_Movement : MonoBehaviour
         confeti.GetComponent<Renderer>().enabled = true;
 	}
 		
-	void ChangeSceneToPirates(){
-		SceneManager.LoadScene("Scene_MountainsFlying");  
-	}
 	
 
 }

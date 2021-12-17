@@ -19,10 +19,16 @@ public class Diver_Movement : MonoBehaviour
     private bool superficie;
     private bool sorra;
     private bool mapa;   
-    private int ValueInhale = -59; //idealment hauria d'agafar-se de Calibration.maxValueInhale
+    public AudioSource audioSource;
+    public AudioSource audioSourceEnd;
+    //private int ValueInhale = -59; //idealment hauria d'agafar-se de Calibration.maxValueInhale
+   	private int ValueInhale;
+
 
     void Start()
     {
+    	ValueInhale = PlayerPrefs.GetInt("ValueInhaleName");
+    	Debug.Log("ValueInhale new scene"+ValueInhale);
         //diver_breath.GetComponent<Renderer>().enabled = false;
         //diver_swim.GetComponent<Renderer>().enabled = true;
         message_inhale.GetComponent<Renderer>().enabled = true;
@@ -41,6 +47,7 @@ public class Diver_Movement : MonoBehaviour
 	    sorra = false;
 	    breathings_number++; 
 		breathings_number_text.text = breathings_number.ToString();
+		audioSource.Play();
 	   }
 	   if (col.gameObject.name == "barra_sorra")
 	   {
@@ -126,20 +133,20 @@ public class Diver_Movement : MonoBehaviour
 	}
 	
 	void EndScene1(){
-		message_inhale.GetComponent<Renderer>().enabled = false;
+		Destroy(GameObject.Find("cranc"));
+		Destroy(GameObject.Find("missatge_respira"));
+		Destroy(GameObject.Find("missatge_descansa"));
+		audioSourceEnd.Play();
+        audioSourceEnd.SetScheduledEndTime(AudioSettings.dspTime+(2f-0f));
+		//message_inhale.GetComponent<Renderer>().enabled = false;
 		mapaobj.GetComponent<Renderer>().enabled = false;
 		diver_swim.GetComponent<Renderer>().enabled = false;
 		//diver_breath.GetComponent<Renderer>().enabled = false;
 		diver_happy.GetComponent<Renderer>().enabled = true;
 		message_end.GetComponent<Renderer>().enabled = true;
 		confeti.GetComponent<Renderer>().enabled = true;
-		confeti.GetComponent<Renderer>().enabled = true;
-		//Invoke("ChangeSceneToPirates",4);
 	}
 
-	void ChangeSceneToPirates(){
-		//SceneManager.LoadScene("Scene_Pirates");  
-	}
 	
 
 }

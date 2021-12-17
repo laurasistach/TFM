@@ -8,27 +8,34 @@ public class JumpingRiver : MonoBehaviour
 {
 	public GameObject prota;
     public GameObject message_start;
-    private int ValueInhale = -50;
+    public GameObject message_end;
+    //private int ValueInhale = -50;
     private bool colision_up = false;
     private bool colision_down = true;
     private bool end = false;
     private int breathings_number;
     public Text breathings_number_text;
     private float vel_jump = 0.01f; // jump velocity
-    //public AudioSource audioSource;
-    //public AudioSource audioSourceEnd;
+    public AudioSource audioSourceCoin;
+    public AudioSource audioSourceBoing;
+    public AudioSource audioSourceEnd;
+    private int ValueInhale;
 
-    // Start is called before the first frame update
+
     void Start()
     {
-        prota.GetComponent<Renderer>().enabled = true;
+        ValueInhale = PlayerPrefs.GetInt("ValueInhaleName");
+        Debug.Log("ValueInhale new scene"+ValueInhale);
         message_start.GetComponent<Renderer>().enabled = true;
+        message_end.GetComponent<Renderer>().enabled = false;
+
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.name == "box1" || col.gameObject.name == "box2"|| col.gameObject.name == "box3"|| col.gameObject.name == "box4"|| col.gameObject.name == "box5"|| col.gameObject.name == "box6"|| col.gameObject.name == "box7"|| col.gameObject.name == "box8"|| col.gameObject.name == "box9")
+        if (col.gameObject.name == "box1" || col.gameObject.name == "box2"|| col.gameObject.name == "box3"|| col.gameObject.name == "box4"|| col.gameObject.name == "box5"|| col.gameObject.name == "box6"|| col.gameObject.name == "box7"|| col.gameObject.name == "box8"|| col.gameObject.name == "box9" || col.gameObject.name == "box10")
         {
+        audioSourceCoin.Play();
         colision_up = true;
         colision_down = false;
         breathings_number++; 
@@ -56,12 +63,13 @@ public class JumpingRiver : MonoBehaviour
     void Update()
     {
         Vector3 position = prota.transform.position;
-        //float db = 20 * Mathf.Log10(Mathf.Abs(MicInput.MicLoudness));
+        
+        float db = 20 * Mathf.Log10(Mathf.Abs(MicInput.MicLoudness));
 
-        if (end == false && colision_up == false && colision_down == true && Input.GetKeyDown(KeyCode.Space)){ 
-        //if (........ && db<1 && db > (ValueInhale + ValueInhale*0.3) ){
-            Invoke("Jump",0);
+        //if (end == false && colision_up == false && colision_down == true && Input.GetKeyDown(KeyCode.Space)){ 
+        if (end == false && colision_up == false && colision_down == true && db<1 && db > (ValueInhale + ValueInhale*0.3) ){
             message_start.GetComponent<Renderer>().enabled = false;
+            Invoke("Jump",0);
         }
  
         if (end == false && colision_up == true && colision_down == false){
@@ -69,17 +77,13 @@ public class JumpingRiver : MonoBehaviour
             
         }
 
-        if (end){
+        /* if (end){
             Invoke("End",0);
-        }
+        } */
     }
 
     void Jump(){
-        /* Vector3 pos = prota.transform.position;
-        pos.y = pos.y + 0.8f;
-        pos.x = pos.x + 0.1f;
-        prota.transform.position = pos;*/
-
+    	audioSourceBoing.Play();
         if (GameObject.Find("box1") != null)
         {
         Vector3 posbox1 = GameObject.Find("box1").transform.position;
@@ -139,6 +143,14 @@ public class JumpingRiver : MonoBehaviour
         prota.transform.position = Vector3.Lerp(startPosProta, posbox9,Time.deltaTime * 1/vel_jump);
         }
 
+        else if (GameObject.Find("box10") != null)
+        {
+        Vector3 posbox10 = GameObject.Find("box10").transform.position;
+        Vector3 startPosProta = prota.transform.position;
+        prota.transform.position = Vector3.Lerp(startPosProta, posbox10,Time.deltaTime * 1/vel_jump);
+        }
+
+
     }
 
     void Down(){
@@ -157,37 +169,44 @@ public class JumpingRiver : MonoBehaviour
             else if (GameObject.Find("rock3") != null)
             {
             Vector3 posrock3 = GameObject.Find("rock3").transform.position;
-            prota.transform.position = posrock3;
+            prota.transform.position = posrock3 - new Vector3 (1,-1,0);
             }
             else if (GameObject.Find("rock4") != null)
             {
             Vector3 posrock4 = GameObject.Find("rock4").transform.position;
-            prota.transform.position = posrock4;
+            prota.transform.position = posrock4 - new Vector3 (1,-1,0);
             }
             else if (GameObject.Find("rock5") != null)
             {
             Vector3 posrock5 = GameObject.Find("rock5").transform.position;
-            prota.transform.position = posrock5;
+            prota.transform.position = posrock5 - new Vector3 (1,-1,0);
             }
             else if (GameObject.Find("rock6") != null)
             {
             Vector3 posrock6 = GameObject.Find("rock6").transform.position;
-            prota.transform.position = posrock6;
+            prota.transform.position = posrock6 - new Vector3 (1,-1,0);
             }
             else if (GameObject.Find("rock7") != null)
             {
             Vector3 posrock7 = GameObject.Find("rock7").transform.position;
-            prota.transform.position = posrock7;
+            prota.transform.position = posrock7 - new Vector3 (1,-1,0);
             }
             else if (GameObject.Find("rock8") != null)
             {
             Vector3 posrock8 = GameObject.Find("rock8").transform.position;
-            prota.transform.position = posrock8;
+            prota.transform.position = posrock8 - new Vector3 (1,-1,0);
             }
             else if (GameObject.Find("rock9") != null)
             {
             Vector3 posrock9 = GameObject.Find("rock9").transform.position;
-            prota.transform.position = posrock9;
+            prota.transform.position = posrock9 - new Vector3 (1,-1,0);
+            }
+
+            else if (GameObject.Find("tresor") != null)
+            {
+            Vector3 postresor = GameObject.Find("tresor").transform.position;
+            prota.transform.position = postresor - new Vector3 (1,-1,0);
+            Invoke("End",0.5f);
             }
         }
         if (colision_down) { // ha tocat la pedra 
@@ -196,14 +215,13 @@ public class JumpingRiver : MonoBehaviour
             //message_relax.GetComponent<Renderer>().enabled = false;
         }
         
-        
     }
 
     void End(){
-        //audioSourceEnd.Play();
+        audioSourceEnd.Play();
+        audioSourceEnd.SetScheduledEndTime(AudioSettings.dspTime+(3f-0f));
         prota.GetComponent<Renderer>().enabled = false;
-        /* message_end.GetComponent<Renderer>().enabled = true;
-        prota_celebrate.GetComponent<Renderer>().enabled = true;
-        confeti.GetComponent<Renderer>().enabled = true; */
+        Debug.Log("end!!");
+        message_end.GetComponent<Renderer>().enabled = true;
     }
 }
