@@ -1,14 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement; 
+using System.Text;
+using System.IO;
 
 public class Balloon_Movement : MonoBehaviour
 {
     public GameObject prota;
-    //public GameObject message_inhale;
-    //public GameObject message_relax;
     public GameObject message_end;
     public GameObject confeti;
     private int breathings_number;
@@ -20,16 +21,22 @@ public class Balloon_Movement : MonoBehaviour
     private bool colision = false;
 	public AudioSource audioSource;
 	public AudioSource audioSourceEnd;
-	private int ValueInhale = -36; //idealment hauria d'agafar-se de Calibration.maxValueInhale
+	private int ValueInhale;
+	public List<string> datetime = new List<string>();
+    public List<string> scoreGame = new List<string>();
+    public GameObject semaforverd;
+    public GameObject semaforvermell;
+
 
     void Start()
     {
+    	ValueInhale = PlayerPrefs.GetInt("ValueInhaleName");
     	prota.GetComponent<Renderer>().enabled = true;
         prota_celebrate.GetComponent<Renderer>().enabled = false;
         confeti.GetComponent<Renderer>().enabled = false;
         message_end.GetComponent<Renderer>().enabled = false;
-        //message_inhale.SetActive(false);
-        //message_relax.SetActive(false);
+        semaforverd.SetActive(true);
+        semaforvermell.SetActive(false);
     }
 
   	void OnCollisionEnter2D(Collision2D col)
@@ -37,35 +44,46 @@ public class Balloon_Movement : MonoBehaviour
 	   if (col.gameObject.name == "box1" || col.gameObject.name == "box2"|| col.gameObject.name == "box3"|| col.gameObject.name == "box4"|| col.gameObject.name == "box5"|| col.gameObject.name == "box6"|| col.gameObject.name == "box7"|| col.gameObject.name == "box8"|| col.gameObject.name == "box9")
 	   {
 	   	prota_celebrate.GetComponent<Renderer>().enabled = false;
-        //message_inhale.SetActive(false);
-        //message_relax.SetActive(true);
 	   	colision = true;
 		breathings_number++; 
 		breathings_number_text.text = breathings_number.ToString();
 		audioSource.Play();
 		Destroy(col.gameObject);
-		Debug.Log(breathings_number);
+		semaforverd.SetActive(false);
+        semaforvermell.SetActive(true);
 	   }
 
 	   if (col.gameObject.name == "barra_cel")
 	   {
 	   	cel = true;
 	   	terra = false;
-	    //message_inhale.SetActive(false);
 	   }
 
 	   if (col.gameObject.name == "barra_terra")
 	   {
 	    cel=false;
 	    terra = true;
-	    //message_inhale.SetActive(true);
-	    //message_relax.SetActive(false);
+	    semaforverd.SetActive(true);
+        semaforvermell.SetActive(false);
 	   }
 	   
 
 	   if (col.gameObject.name == "last") 
 	   {
 	   	end=true;
+	   	audioSourceEnd.Play();
+        audioSourceEnd.SetScheduledEndTime(AudioSettings.dspTime+(3f-0f));
+	   	// Save Data
+        datetime.Add(DateTime.Now.ToString("dd/MM/yy    hh:mm tt"));
+        scoreGame.Add(breathings_number.ToString());
+        string path = Application.dataPath + "/Scores/Saved_Data_Games.csv";
+	    	for (int i = 0; i < scoreGame.Count; ++i)
+	        {
+	            using (StreamWriter sw = File.AppendText(path)) {
+	                 sw.WriteLine("user"+"," + datetime[i] + "," +"Scene3" +","+ scoreGame[i]);
+	            }
+	            
+	        }    
 	   }
 
 	}
@@ -105,18 +123,12 @@ public class Balloon_Movement : MonoBehaviour
 	}
 
 	void End(){
-		audioSourceEnd.Play();
 	   	prota.GetComponent<Renderer>().enabled = false;
-	   	//message_inhale.SetActive(false);
-        //message_relax.SetActive(false);
         prota_celebrate.GetComponent<Renderer>().enabled = true;
         confeti.GetComponent<Renderer>().enabled = true;
         message_end.GetComponent<Renderer>().enabled = true;
 	}
-		
-	void ChangeSceneToPirates(){
-		SceneManager.LoadScene("Scene_MountainsFlying");  
-	}
+
 	
 
 }
