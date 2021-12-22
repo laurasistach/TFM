@@ -45,8 +45,8 @@ public class Calibration : MonoBehaviour
         btnEx.onClick.AddListener(CalibrationExhale);
         Button btnInh = Inhale.GetComponent<Button>();
         btnInh.onClick.AddListener(CalibrationInhale);
-        ValueExhale = PlayerPrefs.GetInt("ValueExhalePrefsName",-44); 
-        ValueInhale = PlayerPrefs.GetInt("ValueInhalePrefsName",-65);
+        ValueExhale = PlayerPrefs.GetInt("ValueExhalePrefsName",-74); 
+        ValueInhale = PlayerPrefs.GetInt("ValueInhalePrefsName",-77);
         Debug.Log("ValueExhale start"+ValueExhale);
     }
 
