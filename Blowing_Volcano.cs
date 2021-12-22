@@ -1,7 +1,12 @@
-﻿using System.Collections;
+﻿
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; 
+using System.Text;
+using System.IO;
 
 public class Blowing_Volcano : MonoBehaviour
 {
@@ -19,28 +24,26 @@ public class Blowing_Volcano : MonoBehaviour
     public GameObject lava8;
     public GameObject lava9;
     public GameObject lava10;
-    public GameObject message_blow;
-    public GameObject message_relax;
     public int breathings_number;
     public Text breathings_number_text;
     public AudioSource audioSource;
     public AudioSource audioSourceEnd;
-    //private int ValueExhale = -36; //idealment hauria d'agafar-se de Calibration.maxValueInhale
-    private float targetTime = 1.0f; // 3; temps de bufada; --> canviarho a tot arreu!!!!
-    private float pauseTime = 1.0f; // 3; temps de descans entre blowing i blowing
-    public Text targetTime_text;
+    private float targetTime = 3f; // 3; temps de bufada; --> canviarho a tot arreu!!!!
+    private float pauseTime = 2f; // 3; temps de descans entre blowing i blowing
     private bool end = false;
     private int ValueExhale;
+    public List<string> datetime = new List<string>();
+    public List<string> scoreGame = new List<string>();
+    public GameObject semaforverd;
+    public GameObject semaforvermell;
 
 
     void Start()
     {
         ValueExhale = PlayerPrefs.GetInt("ValueExhaleName");
-        Debug.Log("ValueExhale new scene"+ValueExhale);
         prota_normal.GetComponent<Renderer>().enabled = true;
         prota_blowing.GetComponent<Renderer>().enabled = false;
         prota_end.GetComponent<Renderer>().enabled = false;
-        message_blow.GetComponent<Renderer>().enabled = true;
         air.GetComponent<Renderer>().enabled = false;
         lava1.GetComponent<Renderer>().enabled = true;
         lava2.GetComponent<Renderer>().enabled = true;
@@ -52,7 +55,8 @@ public class Blowing_Volcano : MonoBehaviour
         lava8.GetComponent<Renderer>().enabled = true;
         lava9.GetComponent<Renderer>().enabled = true;
         lava10.GetComponent<Renderer>().enabled = true;
-        message_relax.GetComponent<Renderer>().enabled = false;
+        semaforverd.SetActive(true);
+        semaforvermell.SetActive(false);
 
     }
 
@@ -61,27 +65,26 @@ public class Blowing_Volcano : MonoBehaviour
         float pauseEndTime = Time.realtimeSinceStartup + pauseTime;
         while (Time.realtimeSinceStartup < pauseEndTime){
             yield return 0;
-            message_blow.GetComponent<Renderer>().enabled = false;
-            message_relax.GetComponent<Renderer>().enabled = true;
+            semaforverd.SetActive(false);
+            semaforvermell.SetActive(true);
             prota_normal.GetComponent<Renderer>().enabled = true;
             prota_blowing.GetComponent<Renderer>().enabled = false;
             air.GetComponent<Renderer>().enabled = false;
         }
         Time.timeScale = 1f;
-        message_blow.GetComponent<Renderer>().enabled = true;
-        message_relax.GetComponent<Renderer>().enabled = false;
+        semaforverd.SetActive(true);
+        semaforvermell.SetActive(false);
     }
 
     void Update()
     {
 
         float db = 20 * Mathf.Log10(Mathf.Abs(MicInput.MicLoudness));
-        //if(Input.GetKeyDown(KeyCode.Space))
-        if(end == false && db<1 && db > (ValueExhale + ValueExhale*0.3))
+        if(end == false && db<1 && db > (ValueExhale*1.3))
         {
             Invoke("Blow",0);
             targetTime -= Time.deltaTime;
-            targetTime_text.text = Mathf.Round(targetTime).ToString();
+            //targetTime_text.text = Mathf.Round(targetTime).ToString();
 
             if (targetTime <= 0.0f)
             {
@@ -165,9 +168,18 @@ public class Blowing_Volcano : MonoBehaviour
                     breathings_number++;
                     breathings_number_text.text = breathings_number.ToString();
                     Destroy(GameObject.Find("lava10"));
-                    targetTime_text.text = "0";
                     Time.timeScale = 0f;
-                    Debug.Log("end of the game");
+                    // Save Data
+                    datetime.Add(DateTime.Now.ToString("dd/MM/yy    hh:mm tt"));
+                    scoreGame.Add(breathings_number.ToString());
+                    string path = Application.dataPath + "/Scores/Saved_Data_Games.csv";
+                        for (int i = 0; i < scoreGame.Count; ++i)
+                        {
+                            using (StreamWriter sw = File.AppendText(path)) {
+                                 sw.WriteLine("user"+"," + datetime[i] + "," +"Scene4" +","+ scoreGame[i]);
+                            }
+                            
+                        }   
                     Invoke("End",2);
                 }
             }
@@ -184,8 +196,6 @@ public class Blowing_Volcano : MonoBehaviour
 
 	 
     void End(){
-		message_blow.GetComponent<Renderer>().enabled = false;
-		message_relax.GetComponent<Renderer>().enabled = false;
 		prota_normal.GetComponent<Renderer>().enabled = false;
         prota_blowing.GetComponent<Renderer>().enabled = false;
     	air.GetComponent<Renderer>().enabled = false;

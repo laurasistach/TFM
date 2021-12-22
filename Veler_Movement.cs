@@ -1,8 +1,12 @@
-﻿using System.Collections;
+﻿
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement; 
+using System.Text;
+using System.IO;
 
 public class Veler_Movement : MonoBehaviour
 {
@@ -20,41 +24,60 @@ public class Veler_Movement : MonoBehaviour
     public GameObject veler;
     public GameObject mapa;
     private bool end=false;
-    private bool colision = false;
+    private bool canMove = true;
 	public AudioSource audioSource;
 	public AudioSource audioSourceEnd;
-	//private int ValueExhale = -36; //idealment hauria d'agafar-se de Calibration.maxValueInhale
    	private int ValueExhale;
+   	public List<string> datetime = new List<string>();
+    public List<string> scoreGame = new List<string>();
+    public GameObject semaforverd;
+    public GameObject semaforvermell;
 
 
     void Start()
     {
     	ValueExhale = PlayerPrefs.GetInt("ValueExhaleName");
-    	Debug.Log("ValueExhale new scene"+ValueExhale);
     	prota.GetComponent<Renderer>().enabled = true;
     	pirate.GetComponent<Renderer>().enabled = true;
     	bruixolaObj.GetComponent<Renderer>().enabled = true;
 	    message_end.GetComponent<Renderer>().enabled = false;
         prota_celebrate.GetComponent<Renderer>().enabled = false;
         confeti.GetComponent<Renderer>().enabled = false;
+        semaforverd.SetActive(true);
+        semaforvermell.SetActive(false);
     }
 
   	void OnCollisionEnter2D(Collision2D col)
 	{
 	   if (col.gameObject.name == "box1" || col.gameObject.name == "box2"|| col.gameObject.name == "box3"|| col.gameObject.name == "box4"|| col.gameObject.name == "box5"|| col.gameObject.name == "box6"|| col.gameObject.name == "box7"|| col.gameObject.name == "box8"|| col.gameObject.name == "box9")
 	   {
-	   	colision = true;
 		breathings_number++; 
 		breathings_number_text.text = breathings_number.ToString();
 		audioSource.Play();
 		Destroy(col.gameObject);
 		Debug.Log(breathings_number);
+		canMove= false;
+		Invoke("Relax",0.1f);
+
 	   }
 
 	   if (col.gameObject.name == "bruixola") 
 	   {
 	   	end=true;
-	   }
+	   	audioSourceEnd.Play();
+		audioSourceEnd.SetScheduledEndTime(AudioSettings.dspTime+(3f-0f));
+	   	// Save Data
+        datetime.Add(DateTime.Now.ToString("dd/MM/yy    hh:mm tt"));
+        scoreGame.Add(breathings_number.ToString());
+        string path = Application.dataPath + "/Scores/Saved_Data_Games.csv";
+	    	for (int i = 0; i < scoreGame.Count; ++i)
+	        {
+	            using (StreamWriter sw = File.AppendText(path)) {
+	                 sw.WriteLine("user"+"," + datetime[i] + "," +"Scene2" +","+ scoreGame[i]);
+	            }
+	            
+	        }    
+	   	}
 
 	   if (col.gameObject.tag == "pirata")
 	    {
@@ -76,8 +99,9 @@ public class Veler_Movement : MonoBehaviour
 
     	// Quan bufa -> es mouen més ràpid
     	//if (end == false && Input.GetKeyDown(KeyCode.Space)){ 
-    	if (end == false && db<1 && db > (ValueExhale + ValueExhale*0.3) ){
+    	if (end == false && canMove == true && db<1 && db > (ValueExhale*1.3) ){
 			Invoke("Move",0);
+
 		}
 
 		if (end){
@@ -91,9 +115,25 @@ public class Veler_Movement : MonoBehaviour
 		prota.transform.position = position;
 	}
 
+	void Relax(){
+        StartCoroutine(GamePauser());
+	}
+
+	public IEnumerator GamePauser(){
+		semaforverd.SetActive(false);
+        semaforvermell.SetActive(true);
+	    Time.timeScale = 0;
+	    yield return new WaitForSecondsRealtime (3);
+	    Time.timeScale = 1;
+	    semaforverd.SetActive(true);
+        semaforvermell.SetActive(false);
+        canMove = true;
+        
+   	}
+
 	void End(){
-		audioSourceEnd.Play();
-		audioSourceEnd.SetScheduledEndTime(AudioSettings.dspTime+(3f-0f));
+		//audioSourceEnd.Play();
+		//audioSourceEnd.SetScheduledEndTime(AudioSettings.dspTime+(3f-0f));
 		bruixolaObj.GetComponent<Renderer>().enabled = false;
 	   	prota.GetComponent<Renderer>().enabled = false;
 	   	veler.GetComponent<Renderer>().enabled = false;
