@@ -14,7 +14,7 @@ public class ChangeScene4: MonoBehaviour {
     }  
 
     void Scene5(){
-    	SceneManager.LoadScene("Scene_River");  
+    	SceneManager.LoadScene("Instructions5");  
     }
 
 }   

@@ -14,7 +14,7 @@ public class ChangeScene3: MonoBehaviour {
     }  
 
     void Scene4(){
-    	SceneManager.LoadScene("Scene_Volcano");  
+    	SceneManager.LoadScene("Instructions4");  
     }
 
 }   
