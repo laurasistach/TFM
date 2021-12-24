@@ -6,14 +6,12 @@ public class Pirate_Movement : MonoBehaviour
 {
     public GameObject pirate;
     public GameObject prota;
-    public GameObject message_pirate;
     public AudioSource audioPirate;
-    private int tmax = 16;
+    private int tmax = 10;
 
 
     void Start()
     {
-        message_pirate.GetComponent<Renderer>().enabled = false;
        }
 
     void OnCollisionEnter2D(Collision2D col)
@@ -25,9 +23,6 @@ public class Pirate_Movement : MonoBehaviour
         if (col.gameObject.name == "box1"){
 		Destroy(col.gameObject);
         audioPirate.Play();
-        message_pirate.GetComponent<Renderer>().enabled = true;
-        message_pirate.transform.position = prota.transform.position - new Vector3(20,-10,0);
-    
         Invoke("NewBreathing",0.5f);
         }
         if (col.gameObject.name == "box2"){
@@ -71,7 +66,6 @@ public class Pirate_Movement : MonoBehaviour
         Invoke("NewBreathin9",0.5f);
         }
         if (col.gameObject.name == "bruixola"){
-        Debug.Log("END!!!!");
         audioPirate.Play();
         }
 
