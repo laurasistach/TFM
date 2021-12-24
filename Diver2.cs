@@ -17,12 +17,14 @@ public class Diver2 : MonoBehaviour
     private bool colision_down = true;
     private bool end = false;
     private int breathings_number;
+    private int attempts_number;
     public Text breathings_number_text;
     public AudioSource audioSource;
     public AudioSource audioSourceEnd;
     private int ValueInhale;
     public List<string> scoreGame = new List<string>();
     public List<string> datetime = new List<string>();
+    public List<string> attemptsGame = new List<string>();
     public GameObject semaforverd;
     public GameObject semaforvermell;
 
@@ -39,6 +41,16 @@ public class Diver2 : MonoBehaviour
     {
         if (col.gameObject.name == "box1" || col.gameObject.name == "box2"|| col.gameObject.name == "box3"|| col.gameObject.name == "box4"|| col.gameObject.name == "box5"|| col.gameObject.name == "box6"|| col.gameObject.name == "box7"|| col.gameObject.name == "box8"|| col.gameObject.name == "box9" || col.gameObject.name == "box10")
         {
+        	if (GameObject.Find("wrongrock1") != null) {Destroy(GameObject.Find("wrongrock1"));}
+        	else if (GameObject.Find("wrongrock2") != null) {Destroy(GameObject.Find("wrongrock2"));}
+        	else if (GameObject.Find("wrongrock3") != null) {Destroy(GameObject.Find("wrongrock3"));}
+        	else if (GameObject.Find("wrongrock4") != null) {Destroy(GameObject.Find("wrongrock4"));}
+        	else if (GameObject.Find("wrongrock5") != null) {Destroy(GameObject.Find("wrongrock5"));}
+        	else if (GameObject.Find("wrongrock6") != null) {Destroy(GameObject.Find("wrongrock6"));}
+        	else if (GameObject.Find("wrongrock7") != null) {Destroy(GameObject.Find("wrongrock7"));}
+        	else if (GameObject.Find("wrongrock8") != null) {Destroy(GameObject.Find("wrongrock8"));}
+        	else if (GameObject.Find("wrongrock9") != null) {Destroy(GameObject.Find("wrongrock9"));}
+        	else if (GameObject.Find("wrongrock10") != null) {Destroy(GameObject.Find("wrongrock10"));}	
         audioSource.Play();
         colision_up = true;
         colision_down = false;
@@ -48,37 +60,36 @@ public class Diver2 : MonoBehaviour
         semaforverd.SetActive(false);
         semaforvermell.SetActive(true);
     	}
-
-       if (col.gameObject.name == "rock1" || col.gameObject.name == "rock2"|| col.gameObject.name == "rock3"|| col.gameObject.name == "rock4"|| col.gameObject.name == "rock5"|| col.gameObject.name == "rock6"|| col.gameObject.name == "rock7"|| col.gameObject.name == "rock8"|| col.gameObject.name == "rock9")
+       if (col.gameObject.name == "barra_inf")
         {
         colision_up = false;
         colision_down = true;
-        Destroy(col.gameObject); 
         semaforverd.SetActive(true);
         semaforvermell.SetActive(false);
        }
+
+        if (col.gameObject.name == "wrongrock1" || col.gameObject.name == "wrongrock2"|| col.gameObject.name == "wrongrock3"|| col.gameObject.name == "wrongrock4"|| col.gameObject.name == "wrongrock5"|| col.gameObject.name == "wrongrock6"|| col.gameObject.name == "wrongrock7"|| col.gameObject.name == "wrongrock8"|| col.gameObject.name == "wrongrock9" || col.gameObject.name == "wrongrock10")
+        {
+       	attempts_number++; 
+       	Debug.Log("attempts_number"+attempts_number);
+       	}
        
        if (col.gameObject.name == "map") 
        {
         end=true;
         audioSourceEnd.Play();
         audioSourceEnd.SetScheduledEndTime(AudioSettings.dspTime+(3f-0f));
-
         // Save Data
         datetime.Add(DateTime.Now.ToString("dd/MM/yy    hh:mm tt"));
         scoreGame.Add(breathings_number.ToString());
+        attemptsGame.Add(attempts_number.ToString());
         string path = Application.dataPath + "/Scores/Saved_Data_Games.csv";
-	    	//StreamWriter writer = new StreamWriter(path);
-	    	//writer.WriteLine("userID,datetime,scoreGame1");
 	    	for (int i = 0; i < scoreGame.Count; ++i)
 	        {
 	            using (StreamWriter sw = File.AppendText(path)) {
-	                sw.WriteLine("user"+"," + datetime[i] + "," +"Scene1" +","+ scoreGame[i]);
-	            }
-	            
+	                sw.WriteLine("user"+"," + datetime[i] + "," +"Scene1" +","+ scoreGame[i]+","+attemptsGame[i]);
+	            } 
 	        }    
-	        //writer.Flush();
-	        //writer.Close();
        	}
 
     }
@@ -89,9 +100,15 @@ public class Diver2 : MonoBehaviour
         
         float db = 20 * Mathf.Log10(Mathf.Abs(MicInput.MicLoudness));
 
-        if (end == false && colision_up == false && colision_down == true && db<1 && db > (ValueInhale*1.3) ){
-            //message_start.GetComponent<Renderer>().enabled = false;
-            Invoke("Swim",0);
+        if (end == false && colision_up == false && colision_down == true){
+        	if (db<1 && db > (ValueInhale*1.3)){
+        		Invoke("Swim",0);
+        	}
+        	if (db<1 && db < (ValueInhale*1.3)){ //BUFADA INEFECTIVA
+        		Invoke("Down2",0.1f);
+        	}
+        
+            
         }
  
         if (end == false && colision_up == true && colision_down == false){
@@ -107,73 +124,73 @@ public class Diver2 : MonoBehaviour
     void Swim(){
         if (GameObject.Find("box1") != null)
         {
-        Vector3 position = prota.transform.position;
-		position.y = position.y + 0.1f; 
-		position.x = position.x + 0.1f; 
-		prota.transform.position = position;
+		Vector3 position = prota.transform.position;
+        Vector3 posbox1 = GameObject.Find("box1").transform.position;
+		prota.transform.position = new Vector3(Mathf.Lerp(position.x, posbox1.x, Time.deltaTime * 1), Mathf.Lerp(position.y, posbox1.y, Time.deltaTime * 1),position.z);
+
         }
         else if (GameObject.Find("box2") != null)
         {
+        
        	Vector3 position = prota.transform.position;
-		position.y = position.y + 0.1f; 
-		position.x = position.x + 0.1f; 
-		prota.transform.position = position;
+		Vector3 posbox2 = GameObject.Find("box2").transform.position;
+		prota.transform.position = new Vector3(Mathf.Lerp(position.x, posbox2.x, Time.deltaTime * 1), Mathf.Lerp(position.y, posbox2.y, Time.deltaTime * 1),position.z);
+
         }
         else if (GameObject.Find("box3") != null)
         {
-        Vector3 position = prota.transform.position;
-		position.y = position.y + 0.1f; 
-		position.x = position.x + 0.1f; 
-		prota.transform.position = position;
+       	Vector3 position = prota.transform.position;
+		Vector3 posbox3 = GameObject.Find("box3").transform.position;
+		prota.transform.position = new Vector3(Mathf.Lerp(position.x, posbox3.x, Time.deltaTime * 1), Mathf.Lerp(position.y, posbox3.y, Time.deltaTime * 1),position.z);
+
         }
         else if (GameObject.Find("box4") != null)
         {
         Vector3 position = prota.transform.position;
-		position.y = position.y + 0.1f; 
-		position.x = position.x + 0.1f; 
-		prota.transform.position = position;
+		Vector3 posbox4 = GameObject.Find("box4").transform.position;
+		prota.transform.position = new Vector3(Mathf.Lerp(position.x, posbox4.x, Time.deltaTime * 1), Mathf.Lerp(position.y, posbox4.y, Time.deltaTime * 1),position.z);
+
         }
         else if (GameObject.Find("box5") != null)
         {
         Vector3 position = prota.transform.position;
-		position.y = position.y + 0.1f; 
-		position.x = position.x + 0.1f; 
-		prota.transform.position = position;
+		Vector3 posbox5 = GameObject.Find("box5").transform.position;
+		prota.transform.position = new Vector3(Mathf.Lerp(position.x, posbox5.x, Time.deltaTime * 1), Mathf.Lerp(position.y, posbox5.y, Time.deltaTime * 1),position.z);
+
         }
         else if (GameObject.Find("box6") != null)
         {
         Vector3 position = prota.transform.position;
-		position.y = position.y + 0.1f; 
-		position.x = position.x + 0.1f; 
-		prota.transform.position = position;
+		Vector3 posbox6 = GameObject.Find("box6").transform.position;
+		prota.transform.position = new Vector3(Mathf.Lerp(position.x, posbox6.x, Time.deltaTime * 1), Mathf.Lerp(position.y, posbox6.y, Time.deltaTime * 1),position.z);
+
         }
         else if (GameObject.Find("box7") != null)
         {
         Vector3 position = prota.transform.position;
-		position.y = position.y + 0.1f; 
-		position.x = position.x + 0.1f; 
-		prota.transform.position = position;
+		Vector3 posbox7 = GameObject.Find("box7").transform.position;
+		prota.transform.position = new Vector3(Mathf.Lerp(position.x, posbox7.x, Time.deltaTime * 1), Mathf.Lerp(position.y, posbox7.y, Time.deltaTime * 1),position.z);
+
         }
         else if (GameObject.Find("box8") != null)
         {
         Vector3 position = prota.transform.position;
-		position.y = position.y + 0.1f; 
-		position.x = position.x + 0.1f; 
-		prota.transform.position = position;
+		Vector3 posbox8 = GameObject.Find("box8").transform.position;
+		prota.transform.position = new Vector3(Mathf.Lerp(position.x, posbox8.x, Time.deltaTime * 1), Mathf.Lerp(position.y, posbox8.y, Time.deltaTime * 1),position.z);
+
         }
         else if (GameObject.Find("box9") != null)
         {
         Vector3 position = prota.transform.position;
-		position.y = position.y + 0.1f; 
-		position.x = position.x + 0.1f; 
-		prota.transform.position = position;
+		Vector3 posbox9 = GameObject.Find("box9").transform.position;
+		prota.transform.position = new Vector3(Mathf.Lerp(position.x, posbox9.x, Time.deltaTime * 1), Mathf.Lerp(position.y, posbox9.y, Time.deltaTime * 1),position.z);
+
         }
         else if (GameObject.Find("box10") != null)
         {
         Vector3 position = prota.transform.position;
-		position.y = position.y + 0.1f; 
-		position.x = position.x + 0.1f; 
-		prota.transform.position = position;
+		Vector3 posbox10 = GameObject.Find("box10").transform.position;
+		prota.transform.position = new Vector3(Mathf.Lerp(position.x, posbox10.x, Time.deltaTime * 1), Mathf.Lerp(position.y, posbox10.y, Time.deltaTime * 1),position.z);
         }
 
     }
@@ -241,7 +258,6 @@ public class Diver2 : MonoBehaviour
             Vector3 position = prota.transform.position;
             Vector3 postresor = GameObject.Find("map").transform.position;
             prota.transform.position = postresor;
-            Invoke("End",0.5f);
             }
             
         }
@@ -252,20 +268,84 @@ public class Diver2 : MonoBehaviour
     }
 
    	public IEnumerator GamePauser(){
-	     //Debug.Log ("Inside PauseGame()");
 	     float db=10;
 	     Time.timeScale = 0;
 	     yield return new WaitForSecondsRealtime (2);
-	     //Debug.Log("Done with my pause");
 	     Time.timeScale = 1;
    	}
 
     void End(){
-        //audioSourceEnd.Play();
-        //audioSourceEnd.SetScheduledEndTime(AudioSettings.dspTime+(2f-0f));
         prota.GetComponent<Renderer>().enabled = false;
         prota_end.GetComponent<Renderer>().enabled = true;
-        Debug.Log("end!!");
-        //message_end.GetComponent<Renderer>().enabled = true;
+    }
+
+    void Down2(){
+            if (GameObject.Find("wrongrock1") != null)
+            {
+            Vector3 position = prota.transform.position;
+            Vector3 posrock1 = GameObject.Find("wrongrock1").transform.position;
+			prota.transform.position = new Vector3(position.x, Mathf.Lerp(position.y, posrock1.y, Time.deltaTime * 1),position.z);
+            }
+            else if (GameObject.Find("wrongrock2") != null)
+            {
+            Vector3 position = prota.transform.position;
+			Vector3 posrock2 = GameObject.Find("wrongrock2").transform.position;
+			prota.transform.position = new Vector3(position.x, Mathf.Lerp(position.y, posrock2.y, Time.deltaTime * 1),position.z);
+            
+            }
+            else if (GameObject.Find("wrongrock3") != null)
+            {
+            Vector3 position = prota.transform.position;
+			Vector3 posrock3 = GameObject.Find("wrongrock3").transform.position;
+			prota.transform.position = new Vector3(position.x, Mathf.Lerp(position.y, posrock3.y, Time.deltaTime * 1),position.z);
+            }
+            else if (GameObject.Find("wrongrock4") != null)
+            {
+            Vector3 position = prota.transform.position;
+			Vector3 posrock4 = GameObject.Find("wrongrock4").transform.position;
+			prota.transform.position = new Vector3(position.x, Mathf.Lerp(position.y, posrock4.y, Time.deltaTime * 1),position.z);
+            }
+            else if (GameObject.Find("wrongrock5") != null)
+            {
+            Vector3 position = prota.transform.position;
+			Vector3 posrock5 = GameObject.Find("rock5").transform.position;
+			prota.transform.position = new Vector3(position.x, Mathf.Lerp(position.y, posrock5.y, Time.deltaTime * 1),position.z);
+            }
+            else if (GameObject.Find("wrongrock6") != null)
+            {
+            Vector3 position = prota.transform.position;
+			Vector3 posrock6 = GameObject.Find("wrongrock6").transform.position;
+			prota.transform.position = new Vector3(position.x, Mathf.Lerp(position.y, posrock6.y, Time.deltaTime * 1),position.z);
+            }
+            else if (GameObject.Find("wrongrock7") != null)
+            {
+            Vector3 position = prota.transform.position;
+			Vector3 posrock7 = GameObject.Find("wrongrock7").transform.position;
+			prota.transform.position = new Vector3(position.x, Mathf.Lerp(position.y, posrock7.y, Time.deltaTime * 1),position.z);
+            }
+            else if (GameObject.Find("wrongrock8") != null)
+            {
+            Vector3 position = prota.transform.position;
+			Vector3 posrock8 = GameObject.Find("wrongrock8").transform.position;
+			prota.transform.position = new Vector3(position.x, Mathf.Lerp(position.y, posrock8.y, Time.deltaTime * 1),position.z);
+            }
+            else if (GameObject.Find("wrongrock9") != null)
+            {
+            Vector3 position = prota.transform.position;
+			Vector3 posrock9 = GameObject.Find("wrongrock9").transform.position;
+			prota.transform.position = new Vector3(position.x, Mathf.Lerp(position.y, posrock9.y, Time.deltaTime * 1),position.z);
+            }
+            else if (GameObject.Find("wrongrock10") != null)
+            {
+            Vector3 position = prota.transform.position;
+			Vector3 posrock10 = GameObject.Find("wrongrock10").transform.position;
+			prota.transform.position = new Vector3(position.x, Mathf.Lerp(position.y, posrock10.y, Time.deltaTime * 1),position.z);
+            }
+            else if (GameObject.Find("map") != null)
+            {
+            Vector3 position = prota.transform.position;
+            Vector3 postresor = GameObject.Find("map").transform.position;
+            prota.transform.position = postresor;
+            }
     }
 }

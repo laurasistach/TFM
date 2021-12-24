@@ -4,17 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;  
 
-public class ChangeScene4: MonoBehaviour {  
+public class ChangeScene0: MonoBehaviour {  
 	public Button buttonGoScene;
 	
 	void Start() {  
 
         Button btn = buttonGoScene.GetComponent<Button>();
-        btn.onClick.AddListener(Scene5);
+        btn.onClick.AddListener(Scene1);
     }  
 
-    void Scene5(){
-    	SceneManager.LoadScene("Instructions5");  
+    void Scene1(){
+    	SceneManager.LoadScene("AllScenes");  
     }
 
 }   
