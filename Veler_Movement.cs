@@ -12,8 +12,6 @@ public class Veler_Movement : MonoBehaviour
 {
     public GameObject prota;
     public GameObject pirate;
-    public GameObject message_inhale;
-    public GameObject message_relax;
     public GameObject bomba;
     private int breathings_number;
     public Text breathings_number_text;
@@ -30,9 +28,9 @@ public class Veler_Movement : MonoBehaviour
    	private int ValueExhale;
    	public List<string> datetime = new List<string>();
     public List<string> scoreGame = new List<string>();
+    public List<string> attemptsGame = new List<string>();
     public GameObject semaforverd;
     public GameObject semaforvermell;
-
 
     void Start()
     {
@@ -49,13 +47,12 @@ public class Veler_Movement : MonoBehaviour
 
   	void OnCollisionEnter2D(Collision2D col)
 	{
-	   if (col.gameObject.name == "box1" || col.gameObject.name == "box2"|| col.gameObject.name == "box3"|| col.gameObject.name == "box4"|| col.gameObject.name == "box5"|| col.gameObject.name == "box6"|| col.gameObject.name == "box7"|| col.gameObject.name == "box8"|| col.gameObject.name == "box9")
+	   if (col.gameObject.name == "box1" || col.gameObject.name == "box2"|| col.gameObject.name == "box3"|| col.gameObject.name == "box4"|| col.gameObject.name == "box5"|| col.gameObject.name == "box6"|| col.gameObject.name == "box7"|| col.gameObject.name == "box8"|| col.gameObject.name == "box9"|| col.gameObject.name == "bruixola")
 	   {
 		breathings_number++; 
 		breathings_number_text.text = breathings_number.ToString();
 		audioSource.Play();
 		Destroy(col.gameObject);
-		Debug.Log(breathings_number);
 		canMove= false;
 		Invoke("Relax",0.1f);
 
@@ -66,14 +63,25 @@ public class Veler_Movement : MonoBehaviour
 	   	end=true;
 	   	audioSourceEnd.Play();
 		audioSourceEnd.SetScheduledEndTime(AudioSettings.dspTime+(3f-0f));
+		bruixolaObj.GetComponent<Renderer>().enabled = false;
+	   	prota.GetComponent<Renderer>().enabled = false;
+	   	veler.GetComponent<Renderer>().enabled = false;
+        mapa.GetComponent<Renderer>().enabled = false;
+    	pirate.GetComponent<Renderer>().enabled = false;
+    	bomba.GetComponent<Renderer>().enabled = false;
+	    message_end.GetComponent<Renderer>().enabled = true;
+        prota_celebrate.GetComponent<Renderer>().enabled = true;
+        confeti.GetComponent<Renderer>().enabled = true;
+
 	   	// Save Data
         datetime.Add(DateTime.Now.ToString("dd/MM/yy    hh:mm tt"));
         scoreGame.Add(breathings_number.ToString());
+        attemptsGame.Add(Pirate_Movement.attempts_number.ToString());
         string path = Application.dataPath + "/Scores/Saved_Data_Games.csv";
 	    	for (int i = 0; i < scoreGame.Count; ++i)
 	        {
 	            using (StreamWriter sw = File.AppendText(path)) {
-	                 sw.WriteLine("user"+"," + datetime[i] + "," +"Scene2" +","+ scoreGame[i]);
+	                 sw.WriteLine("user"+"," + datetime[i] + "," +"Scene2" +","+ scoreGame[i]+","+attemptsGame[i]);
 	            }
 	            
 	        }    
@@ -98,20 +106,15 @@ public class Veler_Movement : MonoBehaviour
     	}
 
     	// Quan bufa -> es mouen més ràpid
-    	//if (end == false && Input.GetKeyDown(KeyCode.Space)){ 
     	if (end == false && canMove == true && db<1 && db > (ValueExhale*1.3) ){
 			Invoke("Move",0);
 
-		}
-
-		if (end){
-			Invoke("End",0);
 		}
 	}
 
 	void Move(){
 		Vector3 position = prota.transform.position;
-		position.x = position.x + 0.2f; //2
+		position.x = position.x + 0.5f; //2
 		prota.transform.position = position;
 	}
 
@@ -123,7 +126,7 @@ public class Veler_Movement : MonoBehaviour
 		semaforverd.SetActive(false);
         semaforvermell.SetActive(true);
 	    Time.timeScale = 0;
-	    yield return new WaitForSecondsRealtime (3);
+	    yield return new WaitForSecondsRealtime (0);//3
 	    Time.timeScale = 1;
 	    semaforverd.SetActive(true);
         semaforvermell.SetActive(false);
@@ -131,19 +134,6 @@ public class Veler_Movement : MonoBehaviour
         
    	}
 
-	void End(){
-		//audioSourceEnd.Play();
-		//audioSourceEnd.SetScheduledEndTime(AudioSettings.dspTime+(3f-0f));
-		bruixolaObj.GetComponent<Renderer>().enabled = false;
-	   	prota.GetComponent<Renderer>().enabled = false;
-	   	veler.GetComponent<Renderer>().enabled = false;
-        mapa.GetComponent<Renderer>().enabled = false;
-    	pirate.GetComponent<Renderer>().enabled = false;
-    	bomba.GetComponent<Renderer>().enabled = false;
-	    message_end.GetComponent<Renderer>().enabled = true;
-        prota_celebrate.GetComponent<Renderer>().enabled = true;
-        confeti.GetComponent<Renderer>().enabled = true;
-	}
 		
 	
 

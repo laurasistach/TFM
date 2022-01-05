@@ -31,14 +31,18 @@ public class JumpingRiver : MonoBehaviour
     {
         ValueInhale = PlayerPrefs.GetInt("ValueInhaleName");
         message_end.GetComponent<Renderer>().enabled = false;
-        //StartCoroutine(GamePauser());
+        prota.GetComponent<Renderer>().enabled = true;
+        semaforverd.SetActive(true);
+        semaforvermell.SetActive(false);
+        StartCoroutine(GamePauser());
+
     }
 
-    /* public IEnumerator GamePauser(){
+    public IEnumerator GamePauser(){
          Time.timeScale = 0;
-         yield return new WaitForSecondsRealtime (2);
+         yield return new WaitForSecondsRealtime (1);
          Time.timeScale = 1;
-    } */
+    }
 
 
     void OnCollisionEnter2D(Collision2D col)
@@ -90,9 +94,8 @@ public class JumpingRiver : MonoBehaviour
         
         float db = 20 * Mathf.Log10(Mathf.Abs(MicInput.MicLoudness));
 
-        //if (end == false && colision_up == false && colision_down == true && Input.GetKeyDown(KeyCode.Space)){ 
         if (end == false && colision_up == false && colision_down == true && db<1 && db > (ValueInhale*1.3) ){
-            audioSourceBoing.Play();
+            //audioSourceBoing.Play();
             Invoke("Jump",0);
         }
  
@@ -243,7 +246,6 @@ public class JumpingRiver : MonoBehaviour
 
     void End(){
         prota.GetComponent<Renderer>().enabled = false;
-        Debug.Log("end!!");
         message_end.GetComponent<Renderer>().enabled = true;
     }
 }

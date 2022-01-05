@@ -17,11 +17,6 @@ public class AdminLogin : MonoBehaviour
     public List<string> userID = new List<string>();
     public List<string> passwords = new List<string>();
     public List<string> datetime = new List<string>();
-    public List<string> scoreGame1 = new List<string>();
-    public List<string> scoreGame2 = new List<string>();
-    public List<string> scoreGame3 = new List<string>();
-    public List<string> scoreGame4 = new List<string>();
-    public List<string> scoreGame5 = new List<string>();
 
     void Start()
     {
@@ -32,9 +27,9 @@ public class AdminLogin : MonoBehaviour
 
     Dictionary<int, string> userData = new Dictionary<int, string>
     {
-        {001,"123456" },
-        {002,"123456" },
-        {003,"123456" }
+        {0000,"123456" },{0111,"123456" },{0122,"186571" },{0133,"123456" },{0144,"489371" },{0155,"856473" },
+        {0166,"128658" },{0177,"946284" },{0188,"867535" },{0199,"194871" },{0200,"110471" },{0211,"476910" },
+        {0222,"857104" },{0233,"573991" },{0244,"993716" },{0255,"374561" },{0266,"129572" },{0277,"956381" }
     };
 
     public void adminDetails()
@@ -45,7 +40,7 @@ public class AdminLogin : MonoBehaviour
         if (userData.TryGetValue(userName, out foundPassword) && (foundPassword == password))
         {
             Debug.Log("User authenticated");
-            SceneManager.LoadScene("AllScenes");  
+            SceneManager.LoadScene("Benvinguda");  
             userID.Add(userNameField.text);
             passwords.Add(password);
             datetime.Add(DateTime.Now.ToString("dd/MM/yy    hh:mm tt"));
@@ -59,13 +54,16 @@ public class AdminLogin : MonoBehaviour
 
     void Update(){
     	string path = Application.dataPath + "/Saved_Data.csv";
+        string path2 = Application.dataPath + "/Scores/Saved_Data_Games.csv";
     	//StreamWriter writer = new StreamWriter(path);
-    	//writer.WriteLine("userID,passwords,datetime,scoreGame1,scoreGame2,scoreGame3,scoreGame4,scoreGame5");
     	for (int i = 0; i < userID.Count; ++i)
         {
             //writer.WriteLine(userID[i] + "," + passwords[i] + "," + datetime[i]);
             using (StreamWriter sw = File.AppendText(path)) {
                  sw.WriteLine(userID[i] + "," + passwords[i] + "," + datetime[i]);
+            }
+            using (StreamWriter sw = File.AppendText(path2)) {
+                 sw.WriteLine(userID[i]+","+datetime[i]+",,,");
             }
         }    
         //writer.Flush();
