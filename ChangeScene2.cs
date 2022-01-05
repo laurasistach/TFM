@@ -10,11 +10,11 @@ public class ChangeScene2: MonoBehaviour {
 	void Start() {  
 
         Button btn = buttonGoScene.GetComponent<Button>();
-        btn.onClick.AddListener(Scene3);
+        btn.onClick.AddListener(Scene2);
     }  
 
-    void Scene3(){
-    	SceneManager.LoadScene("Instructions3");  
+    void Scene2(){
+    	SceneManager.LoadScene("Instructions2");  
     }
 
 }   

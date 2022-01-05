@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;  
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;  
- using System.Linq;
+using System.Linq;
 
 
 public class Calibration : MonoBehaviour
@@ -12,22 +12,22 @@ public class Calibration : MonoBehaviour
 	public Button Inhale;
 	private bool buttonExhalePressed;
 	private bool buttonInhalePressed;
-	public float timer1 = 1; //3
-	public float timer2 = 1; //3
+	public float timer1 = 3; 
+	public float timer2 = 3; 
 	private List<float> ValuesExhale = new List<float>();
 	private List<float> ValuesInhale = new List<float>();
 	public Text maxValueExhale_text;
 	public Text maxValueInhale_text;
-	public static float maxValueExhale;
-	public static float maxValueInhale;
-	private int ValueExhale;
-	private int ValueInhale;
+	public static int ValueExhale;
+	public static int ValueInhale;
 
-    private void OnDestroy(){ //Called when changing scenes, if object not set to DontDestroyOnLoad.
+    /* private void OnDestroy(){ //Called when changing scenes, if object not set to DontDestroyOnLoad.
     	PlayerPrefs.SetInt("ValueInhaleName",ValueInhale);
     	PlayerPrefs.SetInt("ValueExhaleName",ValueExhale);
+    	//PlayerPrefs.SetInt("ValueInhaleName",-36);
+    	//PlayerPrefs.SetInt("ValueExhaleName",-58);
     	PlayerPrefs.Save();
-    }
+    }*/
     
     public void AddToListExhale(float value)
     {
@@ -45,22 +45,22 @@ public class Calibration : MonoBehaviour
         btnEx.onClick.AddListener(CalibrationExhale);
         Button btnInh = Inhale.GetComponent<Button>();
         btnInh.onClick.AddListener(CalibrationInhale);
-        ValueExhale = PlayerPrefs.GetInt("ValueExhalePrefsName",-74); 
-        ValueInhale = PlayerPrefs.GetInt("ValueInhalePrefsName",-77);
-        Debug.Log("ValueExhale start"+ValueExhale);
+        //ValueExhale = PlayerPrefs.GetInt("ValueExhaleName",-36); 
+        //ValueInhale = PlayerPrefs.GetInt("ValueInhaleName",-58); 
+    }
+
+     void CalibrationInhale(){
+    	buttonInhalePressed = true;
     }
 
 
     void CalibrationExhale(){
     	buttonExhalePressed = true;
     }
-    void CalibrationInhale(){
-    	buttonInhalePressed = true;
-    }
 
     void Update()
     {
-    	// Exhalació
+    	// Exhale
     	if (buttonExhalePressed == true){
 			timer1 -= Time.deltaTime;
     	}
@@ -84,7 +84,7 @@ public class Calibration : MonoBehaviour
 			maxValueExhale_text.text = Mathf.Round(maxValueExhale).ToString();
 			int ValueExhale = Mathf.RoundToInt(maxValueExhale);
 			PlayerPrefs.SetInt("ValueExhaleName",ValueExhale);
-			Debug.Log("ValueExhale after blowing"+ValueExhale);
+			PlayerPrefs.Save();
 		}
 
 		// Inhalació
@@ -111,14 +111,10 @@ public class Calibration : MonoBehaviour
 			maxValueInhale_text.text = Mathf.Round(maxValueInhale).ToString();
 			int ValueInhale = Mathf.RoundToInt(maxValueInhale);
 			PlayerPrefs.SetInt("ValueInhaleName",ValueInhale);
+			PlayerPrefs.Save();
 		}
     }
 
-
-    /* private void LoadData(){ 
-    	ValueExhale = PlayerPrefs.GetInt(ValueExhalePrefsName,-44); // si no hi ha cap valor guardat, s'inicialitzarà a -44
-    	ValueInhale = PlayerPrefs.GetInt(ValueInhalePrefsName,-65);
-    } */
     
 
 
