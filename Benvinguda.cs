@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;  
 
+// this script defines the navigation from the "welcoming" interfaces to "all scenes" interface
+
 public class Benvinguda: MonoBehaviour {  
 	public Button button1;
 	public GameObject benvinguda1;
