@@ -2,29 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This script defines the movement of the pirate in the game "Pirates"
+
 public class Pirate_Movement : MonoBehaviour
 {
     public GameObject pirate;
     public GameObject prota;
     public AudioSource audioPirate;
-    private int tmax = 5;
+    private int tmax = 5; // maximum time for the sailing boat to reach a coin
     public static int attempts_number;
     public GameObject semaforverd;
     public GameObject semaforvermell;
     private bool canMove = true;
-
-    /* public IEnumerator GamePauser(){
-        semaforverd.SetActive(false);
-        semaforvermell.SetActive(true);
-        Time.timeScale = 0;
-        yield return new WaitForSecondsRealtime (3);
-        Time.timeScale = 1;
-        semaforverd.SetActive(true);
-        semaforvermell.SetActive(false);
-        canMove = true;
-        
-    }
-    */
 
     public void OnCollisionEnter2D(Collision2D col)
 	{
@@ -36,8 +25,8 @@ public class Pirate_Movement : MonoBehaviour
 		Destroy(col.gameObject);
         audioPirate.Play();
         attempts_number++;
-        //StartCoroutine(GamePauser());
-        Invoke("NewBreathing",0.5f);
+        //StartCoroutine(GamePauser()); //think about pausing the game or not when the pirate reaches a coin!
+        Invoke("NewBreathing",0.5f); 
         }
         if (col.gameObject.name == "box2"){
 		Destroy(col.gameObject);
@@ -86,58 +75,60 @@ public class Pirate_Movement : MonoBehaviour
     void Update()
     {
     	Vector3 position = pirate.transform.position; 
-    	position.x = position.x + 0.01f;
+    	position.x = position.x + 0.01f; // pirate is always moving (slowly)
     	pirate.transform.position = position;
 
-        // Lerp cap a box1
+        // Next lines define that the pirate will move from its position to the next coin (box)
+
+        // Lerp to box1
     	if (GameObject.Find("box1") != null){
     		Vector3 posbox1 = GameObject.Find("box1").transform.position;
 			Vector3 startPosPirate = pirate.transform.position;
     		pirate.transform.position = Vector3.Lerp(startPosPirate, posbox1,Time.deltaTime * 1/tmax);
         }
-        // Lerp cap a box2
+        // Lerp to box2
     	if (GameObject.Find("box1") == null && GameObject.Find("box2") != null){
     		Vector3 posbox2=  GameObject.Find("box2").transform.position;
 			Vector3 startPosPirate = pirate.transform.position;
     		pirate.transform.position = Vector3.Lerp(startPosPirate, posbox2,Time.deltaTime * 1/tmax);
     	}
-        // Lerp cap a box3
+        // Lerp to box3
         if (GameObject.Find("box1") == null && GameObject.Find("box2") == null && GameObject.Find("box3") != null){
             Vector3 posbox3 = GameObject.Find("box3").transform.position;
             Vector3 startPosPirate = pirate.transform.position;
             pirate.transform.position = Vector3.Lerp(startPosPirate, posbox3,Time.deltaTime * 1/tmax);
         }
-        // Lerp cap a box4
+        // Lerp to box4
         if (GameObject.Find("box1") == null && GameObject.Find("box2") == null && GameObject.Find("box3") == null && GameObject.Find("box4") != null){
             Vector3 posbox4=  GameObject.Find("box4").transform.position;
             Vector3 startPosPirate = pirate.transform.position;
             pirate.transform.position = Vector3.Lerp(startPosPirate, posbox4,Time.deltaTime * 1/tmax);
         } 
-        // Lerp cap a box5
+        // Lerp to box5
         if (GameObject.Find("box1") == null && GameObject.Find("box2") == null && GameObject.Find("box3") == null && GameObject.Find("box4") == null && GameObject.Find("box5") != null){
             Vector3 posbox5=  GameObject.Find("box5").transform.position;
             Vector3 startPosPirate = pirate.transform.position;
             pirate.transform.position = Vector3.Lerp(startPosPirate, posbox5,Time.deltaTime * 1/tmax);
         }
-        // Lerp cap a box6
+        // Lerp to box6
         if (GameObject.Find("box1") == null && GameObject.Find("box2") == null && GameObject.Find("box3") == null && GameObject.Find("box4") == null && GameObject.Find("box5") == null && GameObject.Find("box6") != null){
             Vector3 posbox6=  GameObject.Find("box6").transform.position;
             Vector3 startPosPirate = pirate.transform.position;
             pirate.transform.position = Vector3.Lerp(startPosPirate, posbox6,Time.deltaTime * 1/tmax);
         }
-        // Lerp cap a box7
+        // Lerp to box7
         if (GameObject.Find("box1") == null && GameObject.Find("box2") == null && GameObject.Find("box3") == null && GameObject.Find("box4") == null && GameObject.Find("box5") == null && GameObject.Find("box6") == null && GameObject.Find("box7") != null){
             Vector3 posbox7=  GameObject.Find("box7").transform.position;
             Vector3 startPosPirate = pirate.transform.position;
             pirate.transform.position = Vector3.Lerp(startPosPirate, posbox7,Time.deltaTime * 1/tmax);
         }
-        // Lerp cap a box8
+        // Lerp to box8
         if (GameObject.Find("box1") == null && GameObject.Find("box2") == null && GameObject.Find("box3") == null && GameObject.Find("box4") == null && GameObject.Find("box5") == null && GameObject.Find("box6") == null && GameObject.Find("box7") == null && GameObject.Find("box8") != null){
             Vector3 posbox8=  GameObject.Find("box8").transform.position;
             Vector3 startPosPirate = pirate.transform.position;
             pirate.transform.position = Vector3.Lerp(startPosPirate, posbox8,Time.deltaTime * 1/tmax);
         }
-        // Lerp cap a box9
+        // Lerp to box9
         if (GameObject.Find("box1") == null && GameObject.Find("box2") == null && GameObject.Find("box3") == null && GameObject.Find("box4") == null && GameObject.Find("box5") == null && GameObject.Find("box6") == null && GameObject.Find("box7") == null && GameObject.Find("box8") == null && GameObject.Find("box9") != null){
             Vector3 posbox9=  GameObject.Find("box9").transform.position;
             Vector3 startPosPirate = pirate.transform.position;
@@ -145,7 +136,9 @@ public class Pirate_Movement : MonoBehaviour
         } 
     }
 
-    void NewBreathing(){
+    // Next lines define the position of the pirate and the sailing boat when the pirate steals a coin
+    // note that the pirate has always the same position as the sailing boat but a little bit behind
+    void NewBreathing(){ 
         prota.transform.position = new Vector3(-66,6,0);
         pirate.transform.position = new Vector3(-66-10,3,0);
     }

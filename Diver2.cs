@@ -7,14 +7,15 @@ using UnityEngine.SceneManagement;
 using System.Text;
 using System.IO;
 
+// This script defines the behaviour of the diver in the "Under the sea" game
+
 public class Diver2 : MonoBehaviour
 {
     public GameObject prota;
     public GameObject prota_end;
-    //public GameObject message_start;
     public GameObject message_end;
-    private bool colision_up = false;
-    private bool colision_down = true;
+    private bool colision_up = false; // this boolean indicates that the avatar reached the superior limit (surface)
+    private bool colision_down = true; // this boolean indicates that the avatar reached the inferior limit (ground)
     private bool end = false;
     private int breathings_number;
     private int attempts_number;
@@ -28,7 +29,7 @@ public class Diver2 : MonoBehaviour
     public GameObject semaforverd;
     public GameObject semaforvermell;
     public AudioSource audioSourceWrong;
-    private float timer = 6f; 
+    private float timer = 6f; // this is the maximum time to reach a coin
     public Text timer_text;
 
     void Start()
@@ -41,8 +42,11 @@ public class Diver2 : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
+        // each box is a coin
         if (col.gameObject.name == "box1" || col.gameObject.name == "box2"|| col.gameObject.name == "box3"|| col.gameObject.name == "box4"|| col.gameObject.name == "box5"|| col.gameObject.name == "box6"|| col.gameObject.name == "box7"|| col.gameObject.name == "box8"|| col.gameObject.name == "box9" || col.gameObject.name == "box10")
         {
+            // a "wrong rock" is a transparent object that indicates that the avatar touched the ground after colliding with a coin
+            // they indicate that the player did not blow in enough and fell to the floor (= wrong breathing) 
             if (GameObject.Find("wrongrock1") != null) {Destroy(GameObject.Find("wrongrock1"));}
             else if (GameObject.Find("wrongrock2") != null) {Destroy(GameObject.Find("wrongrock2"));}
             else if (GameObject.Find("wrongrock3") != null) {Destroy(GameObject.Find("wrongrock3"));}
@@ -64,7 +68,7 @@ public class Diver2 : MonoBehaviour
         semaforverd.SetActive(false);
         semaforvermell.SetActive(true);
         }
-       if (col.gameObject.name == "barra_inf")
+       if (col.gameObject.name == "barra_inf") // this restricts the avatar to move down until finding a transparent bar called "barra_inf"
         {
         colision_up = false;
         colision_down = true;
@@ -74,7 +78,7 @@ public class Diver2 : MonoBehaviour
 
         if (col.gameObject.name == "wrongrock1" || col.gameObject.name == "wrongrock2"|| col.gameObject.name == "wrongrock3"|| col.gameObject.name == "wrongrock4"|| col.gameObject.name == "wrongrock5"|| col.gameObject.name == "wrongrock6"|| col.gameObject.name == "wrongrock7"|| col.gameObject.name == "wrongrock8"|| col.gameObject.name == "wrongrock9" || col.gameObject.name == "wrongrock10")
         {
-        attempts_number++; 
+        attempts_number++; // colliding with a "wrong rock" (ground) means that the user did not blow in enough; therefore it is counted as an attempt
         }
        
        if (col.gameObject.name == "map") 
@@ -103,17 +107,19 @@ public class Diver2 : MonoBehaviour
         
         float db = 20 * Mathf.Log10(Mathf.Abs(MicInput.MicLoudness));
 
+        // if the user has NOT touched the superior limit (surface of the sea) but YES the inferior limit (ground), it goes up
         if (end == false && colision_up == false && colision_down == true){
             timer -= Time.deltaTime;
             timer_text.text = Mathf.Round(timer).ToString();
             if (db<1 && db > (ValueInhale*1.3)){
-                Invoke("Swim",0);
+                Invoke("Swim",0); // it makes the avatar go up
             }
-            if (db<1 && db < (ValueInhale*1.3)){ //BUFADA INEFECTIVA
-                Invoke("Down2",0.1f);
+            if (db<1 && db < (ValueInhale*1.3)){ // it means that the blowing was not strong enough (ineffective)
+                Invoke("Down2",0.1f); // it makes the avatar go down to a "wrong rock"
             }
 
-            if (timer < 0){
+            // if the user takes more than 6 seconds (timer) to reach a coin, it disappears
+            if (timer < 0){ 
                 if (GameObject.Find("box1") != null) {Destroy(GameObject.Find("box1"));Destroy(GameObject.Find("wrongrock1"));audioSourceWrong.Play();}
                 else if (GameObject.Find("box2") != null) {Destroy(GameObject.Find("box2"));Destroy(GameObject.Find("wrongrock2"));audioSourceWrong.Play();}
                 else if (GameObject.Find("box3") != null) {Destroy(GameObject.Find("box3"));Destroy(GameObject.Find("wrongrock3"));audioSourceWrong.Play();}
@@ -127,10 +133,12 @@ public class Diver2 : MonoBehaviour
                 timer = 6;
             }
         }
- 
+
+
+        // if the user has touched the superior limit (surface of the sea) and NOT the inferior limit (ground), it goes down
         if (end == false && colision_up == true && colision_down == false){
             timer = 6;
-            Invoke("Down",0);
+            Invoke("Down",0); 
             
         }
 
@@ -140,7 +148,7 @@ public class Diver2 : MonoBehaviour
         }
     }
 
-    void Swim(){
+    void Swim(){ // it makes the avatar go from its position to the following coin
         if (GameObject.Find("box1") != null)
         {
         Vector3 position = prota.transform.position;
@@ -216,7 +224,7 @@ public class Diver2 : MonoBehaviour
 
     void Down(){
         StartCoroutine(GamePauser());
-        if (colision_down==false && colision_up==true){ //no ha tocat la sorra pero sí la superficie
+        if (colision_down==false && colision_up==true){ // the avatar has not touched the ground but yes the surface
             if (GameObject.Find("rock1") != null)
             {
             Vector3 position = prota.transform.position;
@@ -280,8 +288,8 @@ public class Diver2 : MonoBehaviour
             }
             
         }
-        if (colision_down) { // ha tocat la pedra 
-            colision_up=false; // aixi s'invocarà Jump
+        if (colision_down) { // avatar touched the ground
+            colision_up=false; // this will invoke "Swim" (go up)
         }
         
     }

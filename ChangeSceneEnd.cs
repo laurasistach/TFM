@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;  
 
+// This script defines how to change from "All scenes" interface to the "End" interface
+
 public class ChangeSceneEnd: MonoBehaviour {  
 	public Button buttonGoScene;
 	

@@ -42,6 +42,7 @@ public class Balloon_Movement : MonoBehaviour
 
   	void OnCollisionEnter2D(Collision2D col)
 	{
+		// each box is one diamond
 	   if (col.gameObject.name == "box1" || col.gameObject.name == "box2"|| col.gameObject.name == "box3"|| col.gameObject.name == "box4"|| col.gameObject.name == "box5"|| col.gameObject.name == "box6"|| col.gameObject.name == "box7"|| col.gameObject.name == "box8"|| col.gameObject.name == "box9"|| col.gameObject.name == "last")
 	   {
 	   	prota_celebrate.GetComponent<Renderer>().enabled = false;
@@ -54,13 +55,17 @@ public class Balloon_Movement : MonoBehaviour
         semaforvermell.SetActive(true);
 	   }
 
-	   if (col.gameObject.name == "barra_cel")
+	   // Next colliders restrict the balloon to move only between "barra_cel" and "barra_terra"
+	   // barra_cel is a transparent bar that indicates the limit to which the balloon can go up
+	   // barra_terra is a transparent bar that indicates the limit to which the balloon can go down
+
+	   if (col.gameObject.name == "barra_cel") 
 	   {
 	   	cel = true;
 	   	terra = false;
 	   }
 
-	   if (col.gameObject.name == "barra_terra")
+	   if (col.gameObject.name == "barra_terra") 
 	   {
 	    cel=false;
 	    terra = true;
@@ -69,7 +74,7 @@ public class Balloon_Movement : MonoBehaviour
 	   }
 	   
 
-	   if (col.gameObject.name == "last") 
+	   if (col.gameObject.name == "last") // last diamond
 	   {
 	   	end=true;
 	   	audioSourceEnd.Play();
@@ -95,12 +100,11 @@ public class Balloon_Movement : MonoBehaviour
     	float db = 20 * Mathf.Log10(Mathf.Abs(MicInput.MicLoudness));
 
     	if (end==false) {
-    	// Globus cau sempre (lent)
+    	// Balloon is always going down
     		Invoke("Down",0);
     	}    	
 
-    	// Quan inhala -> es mouen més ràpid
-    	//if (end == false && Input.GetKeyDown(KeyCode.Space) && terra == true && cel == false){ 
+    	// When the balloon has touched the floor AND the player blows in, and the balloon goes up
     	if (end == false && db<1 && db > ValueInhale*1.3 && terra == true && cel == false){
 			Invoke("Move",0);
 		}
@@ -110,14 +114,14 @@ public class Balloon_Movement : MonoBehaviour
 		}
 	}
 
-	void Move(){
+	void Move(){ // this defines the balloon going up (player blows in)
 		Vector3 position = prota.transform.position;
-		position.y = position.y + 0.2f; //1
-		position.x = position.x + 0.1f; //0.5
+		position.y = position.y + 0.2f; 
+		position.x = position.x + 0.1f; 
 		prota.transform.position = position;
 	}
 
-	void Down(){
+	void Down(){ // this defines the balloon going down (player does nothing)
 		Vector3 position = prota.transform.position; 
 	    position.y = position.y - 0.03f; 
 	    position.x = position.x + 0.02f; 

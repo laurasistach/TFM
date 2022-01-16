@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;  
 
+// This script defines how to visualize instructions of the fifth game and load the game itself
+
 public class Instruct5: MonoBehaviour {  
 	public Button button1;
 	public GameObject intruction1;

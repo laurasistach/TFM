@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This script defines Camera movement for Game "Pirates"
+
 public class Camera2 : MonoBehaviour
 {
 	public Transform Camera;

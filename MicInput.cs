@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+// This script defines the microphone behaviour
+// Based on https://forum.unity.com/threads/check-current-microphone-input-volume.133501/ 
  
 public class MicInput : MonoBehaviour
 {
@@ -15,7 +18,7 @@ public class MicInput : MonoBehaviour
  
     private string _device;
  
-    //mic initialization
+    //microphone initialization
     public void InitMic()
     {
         if (_device == null)
@@ -124,7 +127,7 @@ public class MicInput : MonoBehaviour
     }
  
     bool _isInitialized;
-    // start mic when scene starts
+    // start microphone when scene starts
     void OnEnable()
     {
         InitMic();
@@ -149,22 +152,18 @@ public class MicInput : MonoBehaviour
     {
         if (focus)
         {
-            //Debug.Log("Focus");
- 
             if (!_isInitialized)
             {
-                //Debug.Log("Init Mic");
                 InitMic();
             }
         }
         if (!focus)
         {
-            //Debug.Log("Pause");
-            StopMicrophone();
-            //Debug.Log("Stop Mic");
- 
+            StopMicrophone(); 
         }
     }
+
+    
 }
  
  

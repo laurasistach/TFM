@@ -31,8 +31,8 @@ public class Blowing_Volcano : MonoBehaviour
     public AudioSource audioSource;
     public AudioSource audioSourceEnd;
     public AudioSource audioSourceWrong;
-    private float targetTime = 1f; // temps de bufada
-    private float pauseTime = 2f; // temps de descans entre blowing i blowing
+    private float targetTime = 1f; // blow out time
+    private float pauseTime = 2f; // rest time betweeen blowing - blowing
     private bool end = false;
     private int ValueExhale;
     public List<string> datetime = new List<string>();
@@ -42,7 +42,6 @@ public class Blowing_Volcano : MonoBehaviour
     public GameObject semaforvermell;
     private float timer = 4; 
     private bool canBlow = true;
-
 
     void Start()
     {
@@ -231,8 +230,6 @@ public class Blowing_Volcano : MonoBehaviour
         }
     }
         
-
-
 	void Blow(){
 		prota_normal.GetComponent<Renderer>().enabled = false;
         prota_blowing.GetComponent<Renderer>().enabled = true;

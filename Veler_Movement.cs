@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 using System.Text;
 using System.IO;
 
+// This script defines the movement of the avatar in the sailing boat 
+
 public class Veler_Movement : MonoBehaviour
 {
     public GameObject prota;
@@ -22,7 +24,7 @@ public class Veler_Movement : MonoBehaviour
     public GameObject veler;
     public GameObject mapa;
     private bool end=false;
-    private bool canMove = true;
+    private bool canMove = true; // this boolean allows the sailing boat to move or not
 	public AudioSource audioSource;
 	public AudioSource audioSourceEnd;
    	private int ValueExhale;
@@ -47,6 +49,7 @@ public class Veler_Movement : MonoBehaviour
 
   	void OnCollisionEnter2D(Collision2D col)
 	{
+		// each box is a coin
 	   if (col.gameObject.name == "box1" || col.gameObject.name == "box2"|| col.gameObject.name == "box3"|| col.gameObject.name == "box4"|| col.gameObject.name == "box5"|| col.gameObject.name == "box6"|| col.gameObject.name == "box7"|| col.gameObject.name == "box8"|| col.gameObject.name == "box9"|| col.gameObject.name == "bruixola")
 	   {
 		breathings_number++; 
@@ -58,7 +61,7 @@ public class Veler_Movement : MonoBehaviour
 
 	   }
 
-	   if (col.gameObject.name == "bruixola") 
+	   if (col.gameObject.name == "bruixola")  // end of the game
 	   {
 	   	end=true;
 	   	audioSourceEnd.Play();
@@ -87,7 +90,7 @@ public class Veler_Movement : MonoBehaviour
 	        }    
 	   	}
 
-	   if (col.gameObject.tag == "pirata")
+	   if (col.gameObject.tag == "pirata") // if pirate and avatar collide, nothing happens
 	    {
 	    	Physics2D.IgnoreCollision(col.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
 	    }
@@ -98,14 +101,14 @@ public class Veler_Movement : MonoBehaviour
     	float db = 20 * Mathf.Log10(Mathf.Abs(MicInput.MicLoudness));
 
     	if (end==false) {
-    	// Veler es mou sempre (lent)
+    	// The sailing boat is always movint (slowly)
 	    	Vector3 position = prota.transform.position; 
 	    	position.x = position.x + 0.01f;
 	    	prota.transform.position = position;
 
     	}
 
-    	// Quan bufa -> es mouen més ràpid
+    	// When the player blows (above the threshold), the sailing boat moves faster
     	if (end == false && canMove == true && db<1 && db > (ValueExhale*1.3) ){
 			Invoke("Move",0);
 
@@ -114,7 +117,7 @@ public class Veler_Movement : MonoBehaviour
 
 	void Move(){
 		Vector3 position = prota.transform.position;
-		position.x = position.x + 0.5f; //2
+		position.x = position.x + 0.5f; // this defines the movement speed
 		prota.transform.position = position;
 	}
 
@@ -126,7 +129,7 @@ public class Veler_Movement : MonoBehaviour
 		semaforverd.SetActive(false);
         semaforvermell.SetActive(true);
 	    Time.timeScale = 0;
-	    yield return new WaitForSecondsRealtime (0);//3
+	    yield return new WaitForSecondsRealtime (3);
 	    Time.timeScale = 1;
 	    semaforverd.SetActive(true);
         semaforvermell.SetActive(false);

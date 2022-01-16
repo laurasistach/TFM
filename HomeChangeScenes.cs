@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;  
 
+// This script defines the navigation through the "All Scenes" interface
+// It offers the possibility to play any of the games and to calibrate the microphone
+
 public class HomeChangeScenes: MonoBehaviour {  
 	public Button buttonGoScene1;
 	public Button buttonGoScene2;

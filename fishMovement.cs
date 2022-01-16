@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This script defines the movement of the fish (for the "Under the sea" game)
+
 public class fishMovement : MonoBehaviour
 {
 	private float speed = 0.2f;

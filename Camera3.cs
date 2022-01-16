@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This script defines Camera movement for Game "Flying Balloon"
+
 public class Camera3 : MonoBehaviour
 {
 	public Transform Camera;

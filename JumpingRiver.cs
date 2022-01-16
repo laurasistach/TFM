@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using System.Text;
 using System.IO;
 
+// This script defines the avatar movement in the last game
 
 public class JumpingRiver : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class JumpingRiver : MonoBehaviour
     private bool end = false;
     private int breathings_number;
     public Text breathings_number_text;
-    private float vel_jump = 0.01f; 
+    private float vel_jump = 0.01f; // jumping velocity 
     public AudioSource audioSourceCoin;
     public AudioSource audioSourceBoing;
     public AudioSource audioSourceEnd;
@@ -47,10 +48,11 @@ public class JumpingRiver : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
+        // each box is a coin
         if (col.gameObject.name == "box1" || col.gameObject.name == "box2"|| col.gameObject.name == "box3"|| col.gameObject.name == "box4"|| col.gameObject.name == "box5"|| col.gameObject.name == "box6"|| col.gameObject.name == "box7"|| col.gameObject.name == "box8"|| col.gameObject.name == "box9" || col.gameObject.name == "box10")
         {
         audioSourceCoin.Play();
-        colision_up = true;
+        colision_up = true; 
         colision_down = false;
         breathings_number++; 
         breathings_number_text.text = breathings_number.ToString();
@@ -95,22 +97,18 @@ public class JumpingRiver : MonoBehaviour
         float db = 20 * Mathf.Log10(Mathf.Abs(MicInput.MicLoudness));
 
         if (end == false && colision_up == false && colision_down == true && db<1 && db > (ValueInhale*1.3) ){
-            //audioSourceBoing.Play();
-            Invoke("Jump",0);
+            Invoke("Jump",0); // avatar jumps to the coin
         }
  
         if (end == false && colision_up == true && colision_down == false){
-            //Invoke("Down",2);
+            // avatar goes down immediately
             
         }
 
-        /* if (end){
-            Invoke("End",0);
-        } */
     }
 
     void Jump(){
-    	
+        // it indicates the avatar to move from its position to the following coin	
         if (GameObject.Find("box1") != null)
         {
         Vector3 posbox1 = GameObject.Find("box1").transform.position;
@@ -182,7 +180,7 @@ public class JumpingRiver : MonoBehaviour
 
     void Down(){
         Vector3 position = prota.transform.position;
-        if (colision_down==false && colision_up==true){ //no ha tocat la la pedra pero sí la barra dalt
+        if (colision_down==false && colision_up==true){ // avatar has not touched the rock but comes from the coin
             if (GameObject.Find("rock1") != null)
             {
             Vector3 posrock1 = GameObject.Find("rock1").transform.position;
@@ -236,10 +234,8 @@ public class JumpingRiver : MonoBehaviour
             Invoke("End",0.5f);
             }
         }
-        if (colision_down) { // ha tocat la pedra 
-            colision_up=false; // aixi s'invocarà Jump
-            //message_inhale.GetComponent<Renderer>().enabled = true;
-            //message_relax.GetComponent<Renderer>().enabled = false;
+        if (colision_down) { // avatar touched the rock
+            colision_up=false; // this will invoke Jump
         }
         
     }

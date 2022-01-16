@@ -20,11 +20,12 @@ public class AdminLogin : MonoBehaviour
 
     void Start()
     {
-        //Subscribe to onClick event
         loginButton.onClick.AddListener(adminDetails);
 
     }
 
+    // This is the dictionary of users ID and passwords
+    // if we want to create a new user, we just have to add a new "{XXXX,"XXXXXX" }
     Dictionary<int, string> userData = new Dictionary<int, string>
     {
         {0000,"123456" },{0111,"123456" },{0122,"186571" },{0133,"123456" },{0144,"489371" },{0155,"856473" },
@@ -40,7 +41,7 @@ public class AdminLogin : MonoBehaviour
         if (userData.TryGetValue(userName, out foundPassword) && (foundPassword == password))
         {
             Debug.Log("User authenticated");
-            SceneManager.LoadScene("Benvinguda");  
+            SceneManager.LoadScene("Benvinguda"); // It loads the scene welcoming the user
             userID.Add(userNameField.text);
             passwords.Add(password);
             datetime.Add(DateTime.Now.ToString("dd/MM/yy    hh:mm tt"));
@@ -66,7 +67,5 @@ public class AdminLogin : MonoBehaviour
                  sw.WriteLine(userID[i]+","+datetime[i]+",,,");
             }
         }    
-        //writer.Flush();
-        //writer.Close();
     }
 }

@@ -5,29 +5,20 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;  
 using System.Linq;
 
-
 public class Calibration : MonoBehaviour
 {
 	public Button Exhale;
 	public Button Inhale;
 	private bool buttonExhalePressed;
 	private bool buttonInhalePressed;
-	public float timer1 = 3; 
-	public float timer2 = 3; 
+	public float timer1 = 3; // this is the duration of the calibration (blow out)
+	public float timer2 = 3; // this is the duration of the calibration (blow in)
 	private List<float> ValuesExhale = new List<float>();
 	private List<float> ValuesInhale = new List<float>();
 	public Text maxValueExhale_text;
 	public Text maxValueInhale_text;
 	public static int ValueExhale;
 	public static int ValueInhale;
-
-    /* private void OnDestroy(){ //Called when changing scenes, if object not set to DontDestroyOnLoad.
-    	PlayerPrefs.SetInt("ValueInhaleName",ValueInhale);
-    	PlayerPrefs.SetInt("ValueExhaleName",ValueExhale);
-    	//PlayerPrefs.SetInt("ValueInhaleName",-36);
-    	//PlayerPrefs.SetInt("ValueExhaleName",-58);
-    	PlayerPrefs.Save();
-    }*/
     
     public void AddToListExhale(float value)
     {
@@ -45,8 +36,6 @@ public class Calibration : MonoBehaviour
         btnEx.onClick.AddListener(CalibrationExhale);
         Button btnInh = Inhale.GetComponent<Button>();
         btnInh.onClick.AddListener(CalibrationInhale);
-        //ValueExhale = PlayerPrefs.GetInt("ValueExhaleName",-36); 
-        //ValueInhale = PlayerPrefs.GetInt("ValueInhaleName",-58); 
     }
 
      void CalibrationInhale(){
@@ -114,8 +103,6 @@ public class Calibration : MonoBehaviour
 			PlayerPrefs.Save();
 		}
     }
-
-    
 
 
 }
